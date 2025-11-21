@@ -21,7 +21,7 @@ const Pagination = ({
   const pageText = `Strana ${pageIndex + 1} z ${pageCount}`;
   return (
     <div className="flex items-center justify-end gap-2">
-      <div className="f">{pageText}</div>
+      <div className="text-sm text-neutral-700">{pageText}</div>
       <Button
         variant="outline"
         size="sm"

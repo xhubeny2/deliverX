@@ -37,11 +37,18 @@ model Delivery {
   // udaje o doruceni
   recipientName  String
   address        String
-  status         String   @default("PENDING") // PENDING, IN_TRANSIT, DELIVERED, FAILED
+  status         Status   @default(PENDING) // PENDING, IN_TRANSIT, DELIVERED, FAILED
   // Zasilka patri do jedne jizdy (Run)
   // "Run" je volitelny, protoze zasilka muze byt na sklade a cekat na prirazeni
   runId          String?
   run            Run?     @relation(fields: [runId], references: [id])
   createdAt      DateTime @default(now())
   updatedAt      DateTime? @updatedAt
+}
+
+enum Status {
+  PENDING
+  IN_TRANSIT
+  DELIVERED
+  FAILED
 }

@@ -1,24 +1,24 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import React, { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
-import { IconPlus, IconLoader } from '@tabler/icons-react';
+import { IconLoader } from '@tabler/icons-react';
 
 // Shadcn imports
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-  SheetFooter,
-  SheetClose,
-} from '@/components/ui/sheet';
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from '@/components/ui/drawer';
 import {
   Form,
   FormControl,
@@ -34,14 +34,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-
 // Server Action import
 import { createDelivery } from '@/lib/actions';
-
 // Zod
 import { DeliveryFormSchema, DeliveryFormValues } from '@/lib/validations';
+import { Delivery } from '../../../generated/prisma/client';
+import { useIsMobile } from '@/hooks/use-mobile';
 
-function CreateDeliverySheet() {
+type DeliverySheetProps = {
+  children: React.ReactNode;
+  item?: Delivery;
+};
+
+function EditDeliveryDrawer({ children, item }: DeliverySheetProps) {
+  const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
@@ -49,10 +55,10 @@ function CreateDeliverySheet() {
   const form = useForm<DeliveryFormValues>({
     resolver: zodResolver(DeliveryFormSchema),
     defaultValues: {
-      recipientName: '',
-      address: '',
-      orderNumber: '',
-      status: 'PENDING',
+      recipientName: item?.recipientName || '',
+      address: item?.address || '',
+      orderNumber: item?.orderNumber || '',
+      status: item?.status || 'PENDING',
     },
   });
 
@@ -72,25 +78,21 @@ function CreateDeliverySheet() {
   }
 
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger asChild>
-        <Button>
-          <IconPlus className="mr-2 size-4" />
-          New Delivery
-        </Button>
-      </SheetTrigger>
+    <Drawer direction={isMobile ? 'bottom' : 'right'} open={open} onOpenChange={setOpen}>
+      <DrawerTrigger asChild>{children}</DrawerTrigger>
+      <DrawerContent className="h-[85vh] sm:h-full sm:w-[400px] ml-auto">
+        <DrawerHeader>
+          <DrawerTitle>
+            {item ? `Delivery detail ${item!.orderNumber}` : `Create new delivery`}
+          </DrawerTitle>
+          <DrawerDescription>
+            {item ? `ID: ${item!.id}` : `Add details for the new delivery below`}
+          </DrawerDescription>
+        </DrawerHeader>
 
-      <SheetContent className="sm:max-w-[540px] overflow-y-auto">
-        <SheetHeader>
-          <SheetTitle>Create new delivery</SheetTitle>
-          <SheetDescription>
-            Enter the details for the new delivery. Click save to add it to the system..
-          </SheetDescription>
-        </SheetHeader>
-
-        <div className="mt-8">
+        <div className="flex flex-col gap-4 p-4 overflow-y-auto">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
               {/* Delivery number */}
               <FormField
                 control={form.control}
@@ -99,7 +101,7 @@ function CreateDeliverySheet() {
                   <FormItem>
                     <FormLabel>Delivery number</FormLabel>
                     <FormControl>
-                      <Input placeholder="DLVR-2025-001" {...field} />
+                      <Input placeholder="ORD-2025" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -160,26 +162,43 @@ function CreateDeliverySheet() {
                 )}
               />
 
-              <SheetFooter className="mt-8">
-                {/* Close button */}
-                <SheetClose asChild>
-                  <Button variant="outline" type="button">
-                    Close
-                  </Button>
-                </SheetClose>
-
+              <DrawerFooter className="mt-8">
                 {/* Save button */}
                 <Button type="submit" disabled={isPending}>
                   {isPending && <IconLoader className="mr-2 size-4 animate-spin" />}
                   {isPending ? 'Saving...' : 'Create Delivery'}
                 </Button>
-              </SheetFooter>
+
+                {/* Close button */}
+                <DrawerClose asChild>
+                  <Button variant="outline" type="button">
+                    Close
+                  </Button>
+                </DrawerClose>
+              </DrawerFooter>
             </form>
           </Form>
+          {item ? (
+            <div className="mt-4 border-t pt-4">
+              <h3 className="text-sm font-medium mb-2">History</h3>
+              <div className="text-sm text-muted-foreground space-y-2">
+                <div className="flex justify-between">
+                  <span>Created</span>
+                  <span>{`${new Date(item.createdAt).toLocaleTimeString()} ${new Date(item.createdAt).toLocaleDateString()}`}</span>
+                </div>
+                {item.updatedAt && (
+                  <div className="flex justify-between">
+                    <span>Updated</span>
+                    <span>{`${new Date(item.updatedAt).toLocaleTimeString()} ${new Date(item.updatedAt).toLocaleDateString()}`}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : null}
         </div>
-      </SheetContent>
-    </Sheet>
+      </DrawerContent>
+    </Drawer>
   );
 }
 
-export default CreateDeliverySheet;
+export default EditDeliveryDrawer;

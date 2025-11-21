@@ -3,32 +3,13 @@
 import * as React from 'react';
 import { Delivery } from '../../../generated/prisma/client';
 import {
-  closestCenter,
-  DndContext,
-  KeyboardSensor,
-  MouseSensor,
-  TouchSensor,
-  useSensor,
-  useSensors,
-  type DragEndEvent,
-  type UniqueIdentifier,
-} from '@dnd-kit/core';
-import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
-import {
-  arrayMove,
-  SortableContext,
-  useSortable,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import {
   IconCircleCheckFilled,
   IconDotsVertical,
-  IconGripVertical,
   IconLayoutColumns,
   IconTruck,
   IconPackage,
   IconAlertTriangle,
+  IconPlus,
 } from '@tabler/icons-react';
 import {
   ColumnDef,
@@ -40,12 +21,10 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  Row,
   SortingState,
   useReactTable,
   VisibilityState,
 } from '@tanstack/react-table';
-import { toast } from 'sonner';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -67,17 +46,10 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-import CreateDeliverySheet from '@/components/CreateDeliverySheet/CreateDeliverySheet';
-
-import TableCellViewer from '@/components/DeliveriesTable/TableCellViewer';
+import EditDeliveryDrawer from '@/components/DeliveriesTable/EditDeliveryDrawer';
 import Pagination from '@/components/DeliveriesTable/Pagination';
 
 const columns: ColumnDef<Delivery>[] = [
-  {
-    id: 'drag',
-    header: () => null,
-    cell: ({ row }) => <DragHandle id={row.original.id} />,
-  },
   {
     id: 'select',
     header: ({ table }) => (
@@ -106,20 +78,29 @@ const columns: ColumnDef<Delivery>[] = [
   },
   {
     accessorKey: 'orderNumber',
-    header: 'Číslo Obj.',
+    header: 'Order No.',
     cell: ({ row }) => {
-      return <TableCellViewer item={row.original} />;
+      return (
+        <EditDeliveryDrawer item={row.original}>
+          <Button
+            variant="link"
+            className="text-foreground w-fit px-0 text-left font-bold underline decoration-dotted"
+          >
+            {row.original.orderNumber}
+          </Button>
+        </EditDeliveryDrawer>
+      );
     },
     enableHiding: false,
   },
   {
     accessorKey: 'recipientName',
-    header: 'Příjemce',
+    header: 'Recipient',
     cell: ({ row }) => <div className="font-medium">{row.original.recipientName}</div>,
   },
   {
     accessorKey: 'address',
-    header: 'Adresa',
+    header: 'Address',
     cell: ({ row }) => (
       <div className="truncate max-w-[200px]" title={row.original.address}>
         {row.original.address}
@@ -128,7 +109,7 @@ const columns: ColumnDef<Delivery>[] = [
   },
   {
     accessorKey: 'status',
-    header: 'Stav',
+    header: 'Status',
     cell: ({ row }) => {
       const status = row.original.status;
 
@@ -169,59 +150,15 @@ const columns: ColumnDef<Delivery>[] = [
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-32">
-          <DropdownMenuItem>Upravit</DropdownMenuItem>
-          <DropdownMenuItem>Přiřadit řidiče</DropdownMenuItem>
+          <DropdownMenuItem>Edit</DropdownMenuItem>
+          <DropdownMenuItem>Add driver</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem variant="destructive">Smazat</DropdownMenuItem>
+          <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     ),
   },
 ];
-
-function DragHandle({ id }: { id: string }) {
-  const { attributes, listeners } = useSortable({
-    id,
-  });
-
-  return (
-    <Button
-      {...attributes}
-      {...listeners}
-      variant="ghost"
-      size="icon"
-      className="text-muted-foreground size-7 hover:bg-transparent cursor-grab active:cursor-grabbing"
-    >
-      <IconGripVertical className="text-muted-foreground size-3" />
-      <span className="sr-only">Přesunout</span>
-    </Button>
-  );
-}
-
-function DraggableRow({ row }: { row: Row<Delivery> }) {
-  const { transform, transition, setNodeRef, isDragging } = useSortable({
-    id: row.original.id,
-  });
-
-  return (
-    <TableRow
-      data-state={row.getIsSelected() && 'selected'}
-      data-dragging={isDragging}
-      ref={setNodeRef}
-      className="relative z-0 data-[dragging=true]:z-10 data-[dragging=true]:opacity-80"
-      style={{
-        transform: CSS.Transform.toString(transform),
-        transition: transition,
-      }}
-    >
-      {row.getVisibleCells().map((cell) => (
-        <TableCell key={cell.id}>
-          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-        </TableCell>
-      ))}
-    </TableRow>
-  );
-}
 
 export default function DeliveriesTable({ data: initialData }: { data: Delivery[] }) {
   const [data, setData] = React.useState(initialData);
@@ -238,14 +175,6 @@ export default function DeliveriesTable({ data: initialData }: { data: Delivery[
     pageIndex: 0,
     pageSize: 10,
   });
-  const sortableId = React.useId();
-  const sensors = useSensors(
-    useSensor(MouseSensor, {}),
-    useSensor(TouchSensor, {}),
-    useSensor(KeyboardSensor, {}),
-  );
-
-  const dataIds = React.useMemo<UniqueIdentifier[]>(() => data?.map(({ id }) => id) || [], [data]);
 
   const table = useReactTable({
     data,
@@ -272,27 +201,12 @@ export default function DeliveriesTable({ data: initialData }: { data: Delivery[
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
-  function handleDragEnd(event: DragEndEvent) {
-    const { active, over } = event;
-    if (active && over && active.id !== over.id) {
-      setData((data) => {
-        const oldIndex = dataIds.indexOf(active.id);
-        const newIndex = dataIds.indexOf(over.id);
-
-        // Tady by se volala Server Action pro uložení nového pořadí!
-        toast.info('Pořadí změněno (zatím jen lokálně)');
-
-        return arrayMove(data, oldIndex, newIndex);
-      });
-    }
-  }
-
   return (
     <div className="w-full space-y-4">
       {/* Top bar with controls */}
       <div className="flex items-center justify-between px-2">
         <div className="flex items-center gap-2">
-          <h2 className="text-lg font-semibold">Zásilky</h2>
+          <h2 className="text-lg font-semibold">Deliveries</h2>
           <Badge variant="secondary">{data.length}</Badge>
         </div>
 
@@ -300,9 +214,9 @@ export default function DeliveriesTable({ data: initialData }: { data: Delivery[
           {/* Controls */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm">
-                <IconLayoutColumns className="mr-2 size-4" />
-                Columns
+              <Button variant="outline">
+                <IconLayoutColumns className="size-4" />
+                <div className="hidden sm:inline-flex sm:ml-2">Columns</div>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -320,52 +234,53 @@ export default function DeliveriesTable({ data: initialData }: { data: Delivery[
                 ))}
             </DropdownMenuContent>
           </DropdownMenu>
-          <CreateDeliverySheet />
+          <EditDeliveryDrawer>
+            <Button>
+              <IconPlus className="size-4" />
+              <div className="hidden sm:inline-flex sm:ml-2">New Delivery</div>
+            </Button>
+          </EditDeliveryDrawer>
         </div>
       </div>
 
-      {/* Samotná tabulka */}
+      {/* Table itself */}
       <div className="rounded-md border bg-white">
-        <DndContext
-          collisionDetection={closestCenter}
-          modifiers={[restrictToVerticalAxis]}
-          onDragEnd={handleDragEnd}
-          sensors={sensors}
-          id={sortableId}
-        >
-          <Table>
-            <TableHeader className="bg-muted/50">
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <TableHead key={header.id} colSpan={header.colSpan}>
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(header.column.columnDef.header, header.getContext())}
-                      </TableHead>
-                    );
-                  })}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                <SortableContext items={dataIds} strategy={verticalListSortingStrategy}>
-                  {table.getRowModel().rows.map((row) => (
-                    <DraggableRow key={row.id} row={row} />
+        <Table>
+          <TableHeader className="bg-muted/50">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id} colSpan={header.colSpan}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(header.column.columnDef.header, header.getContext())}
+                    </TableHead>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
                   ))}
-                </SortableContext>
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={columns.length} className="h-24 text-center">
-                    Žádné zásilky k zobrazení.
-                  </TableCell>
                 </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </DndContext>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="h-24 text-center">
+                  No deliveries found.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
       </div>
 
       <Pagination
