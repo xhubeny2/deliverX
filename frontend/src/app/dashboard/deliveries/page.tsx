@@ -1,13 +1,16 @@
-import React from 'react';
-import { api } from '@/lib/api';
+import React, { Suspense } from 'react';
+// import { api } from '@/lib/api';
+import { DeliveriesTableWrapper } from '@/components/DeliveriesTable/DeliveriesTableWrapper';
 
-export default async function DeliveriesPage() {
-  const deliveries = await api.get('/deliveries');
+export default function DeliveriesPage() {
+  // const deliveries = await api.get('/deliveries');
 
   return (
     <div>
-      Deliveries Page
-      <pre>{JSON.stringify(deliveries, null, 2)}</pre>
+      {/*TODO: udelat skeleton*/}
+      <Suspense fallback={<div>Loading...</div>}>
+        <DeliveriesTableWrapper />
+      </Suspense>
     </div>
   );
 }

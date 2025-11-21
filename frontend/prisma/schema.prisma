@@ -1,0 +1,47 @@
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource deliverex {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Driver {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String?
+  active    Boolean  @default(true)
+  // Jeden ridic ma vic jizd
+  runs      Run[]
+}
+
+model Run {
+  id          String     @id @default(cuid())
+  date        DateTime   @default(now())
+  name        String?
+  status      String     @default("PLANNED") // PLANNED, IN_PROGRESS, COMPLETED
+  // Jízda patri jednomu ridici
+  driverId    String
+  driver      Driver     @relation(fields: [driverId], references: [id])
+  // Jedna jizda ma vic zasilek
+  deliveries  Delivery[]
+}
+
+model Delivery {
+  id             String   @id @default(cuid())
+  // cislo pro zakaznika
+  orderNumber    String
+  // udaje o doruceni
+  recipientName  String
+  address        String
+  status         String   @default("PENDING") // PENDING, IN_TRANSIT, DELIVERED, FAILED
+  // Zasilka patri do jedne jizdy (Run)
+  // "Run" je volitelny, protoze zasilka muze byt na sklade a cekat na prirazeni
+  runId          String?
+  run            Run?     @relation(fields: [runId], references: [id])
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime? @updatedAt
+}

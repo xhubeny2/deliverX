@@ -1,18 +1,18 @@
 services:
-  backend:
-    container_name: 'backend'
-    image: backend
-    build:
-      context: ./backend
-      dockerfile: backend.dockerfile
-    restart: always
-    environment:
-      DATABASE_URL: ${DATABASE_URL}
-      FRONTEND_URL: ${FRONTEND_URL}
-    ports:
-      - '4000:4000'
-    depends_on:
-      - db
+#  backend:
+#    container_name: 'backend'
+#    image: backend
+#    build:
+#      context: ./backend
+#      dockerfile: backend.dockerfile
+#    restart: always
+#    environment:
+#      DATABASE_URL: ${DATABASE_URL}
+#      FRONTEND_URL: ${FRONTEND_URL}
+#    ports:
+#      - '4000:4000'
+#    depends_on:
+#      - db
   db:
     container_name: 'db'
     image: 'postgres:12'
@@ -20,7 +20,7 @@ services:
     environment:
       POSTGRES_USER: 'postgres'
       POSTGRES_PASSWORD: 'postgres'
-      POSTGRES_DB: 'postgres'
+      POSTGRES_DB: 'deliverex'
     ports:
       - '5432:5432'
     volumes:

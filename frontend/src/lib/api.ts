@@ -1,3 +1,5 @@
+// Not used anymore because of use Server Actions
+
 export class ApiClient {
   private readonly baseUrl: string;
 
