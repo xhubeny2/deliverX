@@ -28,32 +28,57 @@ export async function createDelivery(data: DeliveryFormValues) {
       // Zod validation error
       return { success: false, message: 'Invalid form data.' };
     }
-
     // Other errors (DB,...)
     return { success: false, message: 'Failed to create a delivery.' };
   }
 }
 
-export async function updateDeliveryStatus(deliveryId: string, newStatus: string) {
+export async function updateDelivery(id: string, data: DeliveryFormValues) {
   try {
-    // Slow network simulation
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
+    const validatedData = DeliveryFormSchema.parse(data);
     await prisma.delivery.update({
       where: {
-        id: deliveryId,
+        id,
       },
-      data: {
-        status: newStatus,
-      },
+      data: { ...validatedData, updatedAt: new Date() },
     });
 
-    revalidatePath('/driver');
-    revalidatePath('/tracking');
-
+    revalidatePath('/driver'); // In case the driver page shows editable deliveries
+    revalidatePath('/tracking'); // In case the tracking page shows editable deliveries
+    revalidatePath('/dashboard/deliveries'); // In case the admin dashboard shows editable deliveries
     return { success: true };
   } catch (error) {
-    console.error('Delivery update error:', error);
-    return { success: false, message: 'Cannot update Delivery status.' };
+    console.error('Update Delivery error:', error);
+
+    if (error instanceof z.ZodError) {
+      // Zod validation error
+      return { success: false, message: 'Invalid form data.' };
+    }
+    // Other errors (DB,...)
+    return { success: false, message: 'Failed to create a delivery.' };
   }
 }
+
+// export async function updateDeliveryStatus(deliveryId: string, newStatus: string) {
+//   try {
+//     // Slow network simulation
+//     // await new Promise((resolve) => setTimeout(resolve, 1000));
+//
+//     await prisma.delivery.update({
+//       where: {
+//         id: deliveryId,
+//       },
+//       data: {
+//         status: newStatus,
+//       },
+//     });
+//
+//     revalidatePath('/driver');
+//     revalidatePath('/tracking');
+//
+//     return { success: true };
+//   } catch (error) {
+//     console.error('Delivery update error:', error);
+//     return { success: false, message: 'Cannot update Delivery status.' };
+//   }
+// }

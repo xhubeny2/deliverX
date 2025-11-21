@@ -35,7 +35,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 // Server Action import
-import { createDelivery } from '@/lib/actions';
+import { createDelivery, updateDelivery } from '@/lib/actions';
 // Zod
 import { DeliveryFormSchema, DeliveryFormValues } from '@/lib/validations';
 import { Delivery } from '../../../generated/prisma/client';
@@ -65,7 +65,7 @@ function EditDeliveryDrawer({ children, item }: DeliverySheetProps) {
   // Form submit
   function onSubmit(data: DeliveryFormValues) {
     startTransition(async () => {
-      const result = await createDelivery(data);
+      const result = await (item ? updateDelivery(item.id, data) : createDelivery(data));
 
       if (result.success) {
         toast.success('Delivery successfully saved');
