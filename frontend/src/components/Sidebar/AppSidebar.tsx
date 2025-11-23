@@ -11,7 +11,7 @@ import data from '@/components/Sidebar/sidebarItems';
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
+    <Sidebar collapsible="icon" {...props}>
       <Logo />
       <SidebarContent>
         <MainNavigation items={data.navMain} />
