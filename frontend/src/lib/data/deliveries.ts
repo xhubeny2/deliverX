@@ -12,3 +12,14 @@ export async function getAllDeliveries(): Promise<Delivery[] | null> {
     return null;
   }
 }
+
+export async function getDeliveryById(deliveryId: string): Promise<Delivery | null> {
+  try {
+    return await prisma.delivery.findUnique({
+      where: { id: deliveryId },
+    });
+  } catch (error) {
+    console.error('Delivery read error:', error);
+    return null;
+  }
+}

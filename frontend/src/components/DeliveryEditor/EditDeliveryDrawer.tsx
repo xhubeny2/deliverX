@@ -17,7 +17,6 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from '@/components/ui/drawer';
 import {
   Form,
@@ -40,36 +39,52 @@ import { createDelivery, updateDelivery } from '@/lib/actions';
 import { DeliveryFormSchema, DeliveryFormValues } from '@/lib/validations';
 import { Delivery } from '../../../generated/prisma/client';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 type DeliverySheetProps = {
-  children: React.ReactNode;
-  item?: Delivery;
+  delivery?: Delivery;
 };
 
-function EditDeliveryDrawer({ children, item }: DeliverySheetProps) {
+function EditDeliveryDrawer({ delivery }: DeliverySheetProps) {
+  const [isOpen, setIsOpen] = useState(true);
   const isMobile = useIsMobile();
-  const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   // React Hook Form
   const form = useForm<DeliveryFormValues>({
     resolver: zodResolver(DeliveryFormSchema),
     defaultValues: {
-      recipientName: item?.recipientName || '',
-      address: item?.address || '',
-      orderNumber: item?.orderNumber || '',
-      status: item?.status || 'PENDING',
+      recipientName: delivery?.recipientName || '',
+      address: delivery?.address || '',
+      orderNumber: delivery?.orderNumber || '',
+      status: delivery?.status || 'PENDING',
     },
   });
+
+  const handleOpenChange = (newOpen: boolean) => {
+    if (!newOpen) {
+      setIsOpen(false);
+      // Animation delay for drawer close
+      setTimeout(() => {
+        const params = new URLSearchParams(searchParams.toString());
+        params.delete('create');
+        params.delete('editId');
+        router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+      }, 300);
+    }
+  };
 
   // Form submit
   function onSubmit(data: DeliveryFormValues) {
     startTransition(async () => {
-      const result = await (item ? updateDelivery(item.id, data) : createDelivery(data));
+      const result = await (delivery ? updateDelivery(delivery.id, data) : createDelivery(data));
 
       if (result.success) {
         toast.success('Delivery successfully saved');
-        setOpen(false);
+        handleOpenChange(false);
         form.reset();
       } else {
         toast.error(`Something went wrong - ${result.message}`);
@@ -78,15 +93,14 @@ function EditDeliveryDrawer({ children, item }: DeliverySheetProps) {
   }
 
   return (
-    <Drawer direction={isMobile ? 'bottom' : 'right'} open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>{children}</DrawerTrigger>
+    <Drawer direction={isMobile ? 'bottom' : 'right'} open={isOpen} onOpenChange={handleOpenChange}>
       <DrawerContent className="h-[85vh] sm:h-full sm:w-[400px] ml-auto">
         <DrawerHeader>
           <DrawerTitle>
-            {item ? `Delivery detail ${item!.orderNumber}` : `Create new delivery`}
+            {delivery ? `Delivery detail ${delivery!.orderNumber}` : `Create new delivery`}
           </DrawerTitle>
           <DrawerDescription>
-            {item ? `ID: ${item!.id}` : `Add details for the new delivery below`}
+            {delivery ? `ID: ${delivery!.id}` : `Add details for the new delivery below`}
           </DrawerDescription>
         </DrawerHeader>
 
@@ -148,7 +162,7 @@ function EditDeliveryDrawer({ children, item }: DeliverySheetProps) {
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Vyberte stav" />
+                          <SelectValue placeholder="Select status" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -166,7 +180,7 @@ function EditDeliveryDrawer({ children, item }: DeliverySheetProps) {
                 {/* Save button */}
                 <Button type="submit" disabled={isPending}>
                   {isPending && <IconLoader className="mr-2 size-4 animate-spin" />}
-                  {isPending ? 'Saving...' : 'Create Delivery'}
+                  {isPending ? 'Saving...' : `${delivery ? 'Update' : 'Create'} Delivery`}
                 </Button>
 
                 {/* Close button */}
@@ -178,18 +192,19 @@ function EditDeliveryDrawer({ children, item }: DeliverySheetProps) {
               </DrawerFooter>
             </form>
           </Form>
-          {item ? (
+          {/* Update / edit date */}
+          {delivery ? (
             <div className="mt-4 border-t pt-4">
               <h3 className="text-sm font-medium mb-2">History</h3>
               <div className="text-sm text-muted-foreground space-y-2">
                 <div className="flex justify-between">
                   <span>Created</span>
-                  <span>{`${new Date(item.createdAt).toLocaleTimeString()} ${new Date(item.createdAt).toLocaleDateString()}`}</span>
+                  <span>{`${new Date(delivery.createdAt).toLocaleTimeString()} ${new Date(delivery.createdAt).toLocaleDateString()}`}</span>
                 </div>
-                {item.updatedAt && (
+                {delivery.updatedAt && (
                   <div className="flex justify-between">
                     <span>Updated</span>
-                    <span>{`${new Date(item.updatedAt).toLocaleTimeString()} ${new Date(item.updatedAt).toLocaleDateString()}`}</span>
+                    <span>{`${new Date(delivery.updatedAt).toLocaleTimeString()} ${new Date(delivery.updatedAt).toLocaleDateString()}`}</span>
                   </div>
                 )}
               </div>

@@ -46,8 +46,8 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-import EditDeliveryDrawer from '@/components/DeliveriesTable/EditDeliveryDrawer';
 import Pagination from '@/components/DeliveriesTable/Pagination';
+import { useRouter } from 'next/navigation';
 
 const columns: ColumnDef<Delivery>[] = [
   {
@@ -79,16 +79,15 @@ const columns: ColumnDef<Delivery>[] = [
   {
     accessorKey: 'orderNumber',
     header: 'Order No.',
-    cell: ({ row }) => {
+    cell: ({ row, table }) => {
       return (
-        <EditDeliveryDrawer item={row.original}>
-          <Button
-            variant="link"
-            className="text-foreground w-fit px-0 text-left font-bold underline decoration-dotted"
-          >
-            {row.original.orderNumber}
-          </Button>
-        </EditDeliveryDrawer>
+        <Button
+          variant="link"
+          className="text-foreground w-fit px-0 text-left font-bold underline decoration-dotted"
+          onClick={() => table.options.meta?.openEditDrawer(row.original.id)}
+        >
+          {row.original.orderNumber}
+        </Button>
       );
     },
     enableHiding: false,
@@ -160,12 +159,8 @@ const columns: ColumnDef<Delivery>[] = [
   },
 ];
 
-export default function DeliveriesTable({ data: initialData }: { data: Delivery[] }) {
-  const [data, setData] = React.useState(initialData);
-
-  React.useEffect(() => {
-    setData(initialData);
-  }, [initialData]);
+export default function DeliveriesTable({ data }: { data: Delivery[] }) {
+  const router = useRouter();
 
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
@@ -175,6 +170,14 @@ export default function DeliveriesTable({ data: initialData }: { data: Delivery[
     pageIndex: 0,
     pageSize: 10,
   });
+
+  const handleCreateClick = () => {
+    router.push(`?create=new`);
+  };
+
+  const handleEditClick = (deliveryId: string) => {
+    router.push(`?editId=${deliveryId}`);
+  };
 
   const table = useReactTable({
     data,
@@ -186,7 +189,7 @@ export default function DeliveriesTable({ data: initialData }: { data: Delivery[
       columnFilters,
       pagination,
     },
-    getRowId: (row) => row.id, // Prisma ID je string, to je v pořádku
+    getRowId: (row) => row.id,
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
@@ -199,6 +202,9 @@ export default function DeliveriesTable({ data: initialData }: { data: Delivery[
     getSortedRowModel: getSortedRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
+    meta: {
+      openEditDrawer: handleEditClick,
+    },
   });
 
   return (
@@ -234,12 +240,10 @@ export default function DeliveriesTable({ data: initialData }: { data: Delivery[
                 ))}
             </DropdownMenuContent>
           </DropdownMenu>
-          <EditDeliveryDrawer>
-            <Button>
-              <IconPlus className="size-4" />
-              <div className="hidden sm:inline-flex sm:ml-2">New Delivery</div>
-            </Button>
-          </EditDeliveryDrawer>
+          <Button onClick={handleCreateClick}>
+            <IconPlus className="size-4" />
+            <div className="hidden sm:inline-flex sm:ml-2">New Delivery</div>
+          </Button>
         </div>
       </div>
 
