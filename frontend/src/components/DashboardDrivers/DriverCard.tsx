@@ -13,14 +13,21 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
+export enum DriverStatus {
+  DELAYED = 'delayed',
+  FINISHED = 'finished',
+  ON_ROUTE = 'onRoute',
+}
+
 export interface DriverCardProps {
   name: string;
   // TODO: enum
-  status: 'delayed' | 'finished' | 'onRoute';
+  status: DriverStatus;
   progress: number;
   currentStop: string;
   packagesLeft: number;
   avatar: string;
+  car: string;
 }
 
 export default function DriverCard({
@@ -30,6 +37,7 @@ export default function DriverCard({
   currentStop,
   packagesLeft,
   avatar,
+  car,
 }: DriverCardProps) {
   const isDelayed = status === 'delayed';
   const isFinished = status === 'finished';
@@ -47,7 +55,7 @@ export default function DriverCard({
           </Avatar>
           <div>
             <CardTitle className="text-base font-medium">{name}</CardTitle>
-            <CardDescription className="text-xs">Ford Transit (2BA 1234)</CardDescription>
+            <CardDescription className="text-xs">{car}</CardDescription>
           </div>
         </div>
         {isDelayed && <Badge variant="destructive">Delayed</Badge>}

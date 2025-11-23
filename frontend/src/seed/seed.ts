@@ -1,9 +1,34 @@
 import { PrismaClient } from '@/../generated/prisma/client';
-import { deliveriesData } from './data';
+import { deliveriesData, driversData } from './data';
 
 const prisma = new PrismaClient();
 
-async function main() {
+function addRandomDateTime(): Date {
+  // 80% of deliveries for today
+  const useToday = Math.random() < 0.8;
+
+  const baseDate = new Date();
+  if (!useToday) {
+    const offset = Math.floor(Math.random() * 3) + 1; // 1–3 days
+    baseDate.setDate(baseDate.getDate() + offset);
+  }
+
+  // random time 08:00–15:00
+  const hour = Math.floor(Math.random() * (15 - 8 + 1)) + 8;
+  const minute = Math.floor(Math.random() * 60);
+
+  return new Date(
+    baseDate.getFullYear(),
+    baseDate.getMonth(),
+    baseDate.getDate(),
+    hour,
+    minute,
+    0,
+    0,
+  );
+}
+
+async function seedDeliveries() {
   console.log('Start seeding Deliveries... 🌱');
 
   // 1. Clean up
@@ -12,11 +37,34 @@ async function main() {
 
   // 2. New deliveries
   for (const data of deliveriesData) {
-    const delivery = await prisma.delivery.create({ data });
-    console.log(`Created Delivery with ID: ${delivery.id} (Ord. n.: ${delivery.orderNumber})`);
+    const dataWithDeliveryDate = {
+      ...data,
+      deliveryTime: addRandomDateTime(),
+    };
+    await prisma.delivery.create({ data: dataWithDeliveryDate });
   }
 
   console.log(`Seed completed. Created ${deliveriesData.length} Deliveries. ✅`);
+}
+
+async function seedDrivers() {
+  console.log('Start seeding Drivers... 🌱');
+
+  // 1. Clean up
+  await prisma.driver.deleteMany();
+  console.log('Cleaned up existing drivers. 🧹');
+
+  // 2. New drivers
+  for (const data of driversData) {
+    await prisma.driver.create({ data });
+  }
+
+  console.log(`Seed completed. Created ${driversData.length} Drivers. ✅`);
+}
+
+async function main() {
+  await seedDeliveries();
+  await seedDrivers();
 }
 
 main()

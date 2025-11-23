@@ -6,43 +6,50 @@ import {
   IconSteeringWheel,
   IconTruckDelivery,
 } from '@tabler/icons-react';
+import { getCardsData } from '@/lib/data';
 
 // Sample data for the cards
 const cardData = [
   {
     title: 'To deliver today',
     icon: IconPackage,
-    value: '124',
     description: 'parcels in total',
   },
   {
     title: 'Unassigned',
     icon: IconMapPinX,
-    value: '32',
-    description: 'Waiting for scheduling',
-    warning: true,
+    description: 'waiting for scheduling',
   },
   {
     title: 'Active drivers',
     icon: IconSteeringWheel,
-    value: '4',
-    subValue: ' / 6',
-    description: '2 drivers are off',
   },
   {
-    title: 'Success rate',
+    title: 'Success rate (TODO)',
     icon: IconTruckDelivery,
-    value: '98%',
     description: '+2% compared to yesterday',
   },
 ];
 
-export default function DashboardCards() {
-  // fetch data here
+export default async function DashboardCards() {
+  const { todaysDeliveries, unassignedDeliveries, activeDrivers, totalDrivers } =
+    await getCardsData();
+
+  const liveCardData = [
+    { ...cardData[0], value: todaysDeliveries },
+    { ...cardData[1], value: unassignedDeliveries, warning: unassignedDeliveries > 0 },
+    {
+      ...cardData[2],
+      value: activeDrivers,
+      subValue: ` / ${totalDrivers}`,
+      description: `${totalDrivers - activeDrivers} drivers are off`,
+    },
+    { ...cardData[3], value: '98%' },
+  ];
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-      {cardData.map((card, index) => (
+      {liveCardData.map((card, index) => (
         <Card key={index} {...card} />
       ))}
     </div>
