@@ -136,7 +136,7 @@ const columns: ColumnDef<Delivery>[] = [
   },
   {
     id: 'actions',
-    cell: () => (
+    cell: ({ row, table }) => (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -149,7 +149,9 @@ const columns: ColumnDef<Delivery>[] = [
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-32">
-          <DropdownMenuItem>Edit</DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => table.options.meta?.openEditDrawer(row.original.id)}>
+            Edit
+          </DropdownMenuItem>
           <DropdownMenuItem>Add driver</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
