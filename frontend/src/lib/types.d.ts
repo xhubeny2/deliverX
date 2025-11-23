@@ -7,3 +7,8 @@ export type MainNavigationProps = {
     icon?: Icon;
   }[];
 };
+
+export interface RunEditData {
+  drivers: Driver[];
+  deliveries: Delivery[];
+}

@@ -3,7 +3,7 @@
 import * as React from 'react';
 
 import { MainNavigation } from '@/components/Sidebar/MainNavigation';
-import { NavSecondary } from '@/components/Sidebar/nav-secondary';
+// import { NavSecondary } from '@/components/Sidebar/nav-secondary';
 import { NavUser } from '@/components/Sidebar/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter } from '@/components/ui/sidebar';
 import Logo from '@/components/Sidebar/Logo';
@@ -16,7 +16,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <MainNavigation items={data.navMain} />
         {/*<NavDocuments items={data.documents} />*/}
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        {/*<NavSecondary items={data.navSecondary} className="mt-auto" />*/}
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />

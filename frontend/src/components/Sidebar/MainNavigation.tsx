@@ -18,7 +18,7 @@ export function MainNavigation({ items }: MainNavigationProps) {
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
-        <QuickCreateButton />
+        {/*<QuickCreateButton />*/}
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>

@@ -47,7 +47,7 @@ import {
 } from '@/components/ui/table';
 
 import Pagination from '@/components/DeliveriesTable/Pagination';
-import { useRouter } from 'next/navigation';
+import { useQueryState } from 'nuqs';
 
 const columns: ColumnDef<Delivery>[] = [
   {
@@ -162,8 +162,6 @@ const columns: ColumnDef<Delivery>[] = [
 ];
 
 export default function DeliveriesTable({ data }: { data: Delivery[] }) {
-  const router = useRouter();
-
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -172,13 +170,15 @@ export default function DeliveriesTable({ data }: { data: Delivery[] }) {
     pageIndex: 0,
     pageSize: 10,
   });
+  const [, setEditId] = useQueryState('editId');
+  const [, setIsCreate] = useQueryState('create');
 
   const handleCreateClick = () => {
-    router.push(`?create=new`);
+    setIsCreate('new');
   };
 
   const handleEditClick = (deliveryId: string) => {
-    router.push(`?editId=${deliveryId}`);
+    setEditId(deliveryId);
   };
 
   const table = useReactTable({

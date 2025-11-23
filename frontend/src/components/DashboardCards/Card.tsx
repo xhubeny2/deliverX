@@ -20,7 +20,7 @@ export default function Card({
   warning,
 }: CardProps) {
   return (
-    <CardUI className={cn(warning && 'border-orange-200 bg-orange-50/50')}>
+    <CardUI className={cn('justify-between', warning && 'border-orange-200 bg-orange-50/50')}>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className={cn('text-sm font-medium', warning && 'text-orange-700')}>
           {title}

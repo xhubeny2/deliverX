@@ -15,6 +15,8 @@ export async function getAllDeliveries(): Promise<Delivery[] | null> {
 
 export async function getDeliveryById(deliveryId: string): Promise<Delivery | null> {
   try {
+    // Simulate slow network
+    // await new Promise((resolve) => setTimeout(resolve, 5000));
     return await prisma.delivery.findUnique({
       where: { id: deliveryId },
     });

@@ -1,23 +1,20 @@
 import React, { Suspense } from 'react';
-import { IconSparkles } from '@tabler/icons-react';
-import { Button } from '@/components/ui/button';
 import { DashboardHeader } from '@/components/DashboardHeader/DashboardHeader';
 import Cards from '@/components/DashboardCards/Cards';
 import Drivers from '@/components/DashboardDrivers/Drivers';
 import { CardsSkeleton } from '@/components/DashboardCards/CardsSkeleton';
 import { DriversSkeleton } from '@/components/DashboardDrivers/DriversSkeleton';
+// import EditRunDrawer from '@/components/EditRunDrawer/EditRunDrawer';
+import { GenerateButton } from '@/components/GenerateButton';
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
   return (
     <div className="flex-1 space-y-8 pt-2">
       <DashboardHeader
         heading="Dashboard"
         text={`Today’s Operations Overview - ${new Date().toLocaleDateString()}`}
       >
-        <Button size="lg">
-          <IconSparkles className="mr-2 size-5" />
-          AI Generate Rides
-        </Button>
+        <GenerateButton />
       </DashboardHeader>
 
       {/* Overview (KPI) */}
@@ -32,6 +29,8 @@ export default function DashboardPage() {
       <Suspense fallback={<DriversSkeleton />}>
         <Drivers />
       </Suspense>
+
+      {/*<EditRunDrawer />*/}
     </div>
   );
 }
