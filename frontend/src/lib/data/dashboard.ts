@@ -1,5 +1,5 @@
 import prisma from '@/lib/prisma';
-import { Driver } from '@/../generated/prisma/client';
+import { Driver, Run } from '@/../generated/prisma/client';
 import { withTryCatch } from '@/lib/utils';
 
 const now = new Date();
@@ -64,7 +64,8 @@ export async function getTotalDrivers(): Promise<number> {
 
 export async function getDrivers(): Promise<Driver[] | null> {
   const fn = async () => {
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+    // delay
+    // await new Promise((resolve) => setTimeout(resolve, 3000));
     return prisma.driver.findMany();
   };
   return withTryCatch(fn, 'Drivers read error:', null);
@@ -96,15 +97,51 @@ export async function getCardsData() {
   });
 }
 
-export async function getDriversData() {
+export async function getTodaysRuns(): Promise<Run[] | null> {
   const fn = async () => {
-    const [drivers] = await Promise.all([getDrivers()]);
-
-    return {
-      drivers,
-    };
+    return prisma.run.findMany({
+      where: {
+        date: {
+          gte: startOfDay,
+          lt: endOfDay,
+        },
+      },
+    });
   };
-  return withTryCatch(fn, 'Dashboard read error:', {
-    drivers: [],
-  });
+  return withTryCatch(fn, 'Runs read error:', []);
+}
+
+export async function getDriversWithTodayRuns() {
+  try {
+    const now = new Date();
+    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+
+    return prisma.driver.findMany({
+      include: {
+        runs: {
+          where: {
+            date: {
+              gte: startOfDay,
+              lt: endOfDay,
+            },
+          },
+          include: {
+            deliveries: {
+              select: {
+                status: true,
+                address: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy: {
+        name: 'asc',
+      },
+    });
+  } catch (error) {
+    console.error('Error fetching drivers with runs:', error);
+    return [];
+  }
 }

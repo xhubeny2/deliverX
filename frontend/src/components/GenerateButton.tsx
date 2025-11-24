@@ -13,7 +13,7 @@ export function GenerateButton() {
   };
 
   return (
-    <Button size="lg" onClick={handleClick}>
+    <Button size="lg" onClick={handleClick} className="w-full md:w-auto">
       <IconSparkles className="mr-2 size-5" />
       AI Generate Rides
     </Button>
