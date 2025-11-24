@@ -11,4 +11,5 @@ export type MainNavigationProps = {
 export interface RunEditData {
   drivers: Driver[];
   deliveries: Delivery[];
+  unassignedDeliveriesCount: number;
 }

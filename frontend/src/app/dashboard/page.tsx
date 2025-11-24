@@ -4,8 +4,9 @@ import Cards from '@/components/DashboardCards/Cards';
 import Drivers from '@/components/DashboardDrivers/Drivers';
 import { CardsSkeleton } from '@/components/DashboardCards/CardsSkeleton';
 import { DriversSkeleton } from '@/components/DashboardDrivers/DriversSkeleton';
-// import EditRunDrawer from '@/components/EditRunDrawer/EditRunDrawer';
+import EditRunDrawer from '@/components/EditRunDrawer/EditRunDrawer';
 import { GenerateButton } from '@/components/GenerateButton';
+import { GenerateRidesSheet } from '@/components/EditRunDrawer/RunSheetTemp';
 
 export default async function DashboardPage() {
   return (
@@ -30,7 +31,8 @@ export default async function DashboardPage() {
         <Drivers />
       </Suspense>
 
-      {/*<EditRunDrawer />*/}
+      {/*<GenerateRidesSheet />*/}
+      <EditRunDrawer />
     </div>
   );
 }
