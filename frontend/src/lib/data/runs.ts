@@ -9,9 +9,7 @@ import { prisma } from '@/lib/prisma';
  */
 export async function getRideCreationData() {
   try {
-    // Today: (00:00:00 to 23:59:59)
     const now = new Date();
-    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
 
     const [drivers, deliveries] = await Promise.all([
@@ -21,7 +19,6 @@ export async function getRideCreationData() {
           runs: {
             none: {
               date: {
-                gte: startOfDay,
                 lt: endOfDay,
               },
             },
@@ -32,16 +29,12 @@ export async function getRideCreationData() {
       // Fetch actual delivery objects planned for today (Unassigned & Pending)
       prisma.delivery.findMany({
         where: {
-          status: 'PENDING', // Only active/pending deliveries
+          status: 'PENDING', // Only pending deliveries
           runId: null, // Must be unassigned
-          deliveryTime: {
-            // Scheduled for today
-            gte: startOfDay,
+          deliveryDate: {
+            // Scheduled for today or days before
             lt: endOfDay,
           },
-        },
-        orderBy: {
-          deliveryTime: 'asc', // Sort by expected time if needed
         },
       }),
     ]);

@@ -18,7 +18,6 @@ enum Delivery_Status {
 
 enum Run_Status {
   ACTIVE
-  DELAYED
   FINISHED
 }
 
@@ -49,9 +48,10 @@ model Delivery {
   status         Delivery_Status   @default(PENDING) // PENDING, IN_TRANSIT, DELIVERED, FAILED
   createdAt      DateTime @default(now())
   updatedAt      DateTime? @updatedAt
-  deliveryTime   DateTime
+  deliveryDate   DateTime?
   // Zasilka patri do jedne jizdy (Run)
   // "Run" je volitelny, protoze zasilka muze byt na sklade a cekat na prirazeni
   runId          String?
   run            Run?     @relation(fields: [runId], references: [id])
+  order          Int?
 }

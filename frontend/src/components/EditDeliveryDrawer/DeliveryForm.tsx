@@ -48,7 +48,7 @@ export function DeliveryForm({ initialData, onClose }: DeliveryFormProps) {
       address: initialData?.address || '',
       orderNumber: initialData?.orderNumber || '',
       status: initialData?.status || 'PENDING',
-      deliveryTime: initialData?.deliveryTime || undefined,
+      deliveryDate: initialData?.deliveryDate || undefined,
     },
   });
 
@@ -60,7 +60,7 @@ export function DeliveryForm({ initialData, onClose }: DeliveryFormProps) {
         address: initialData.address,
         status: initialData.status,
         orderNumber: initialData.orderNumber,
-        deliveryTime: initialData.deliveryTime,
+        deliveryDate: initialData.deliveryDate || undefined,
       });
     }
   }, [initialData, form]);
@@ -134,7 +134,7 @@ export function DeliveryForm({ initialData, onClose }: DeliveryFormProps) {
             {/* Delivery date */}
             <FormField
               control={form.control}
-              name="deliveryTime"
+              name="deliveryDate"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>Delivery Date</FormLabel>

@@ -13,19 +13,7 @@ function addRandomDateTime(): Date {
     baseDate.setDate(baseDate.getDate() + offset);
   }
 
-  // random time 08:00–15:00
-  const hour = Math.floor(Math.random() * (15 - 8 + 1)) + 8;
-  const minute = Math.floor(Math.random() * 60);
-
-  return new Date(
-    baseDate.getFullYear(),
-    baseDate.getMonth(),
-    baseDate.getDate(),
-    hour,
-    minute,
-    0,
-    0,
-  );
+  return new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate(), 0, 0, 0, 0);
 }
 
 async function seedDeliveries() {
@@ -39,7 +27,7 @@ async function seedDeliveries() {
   for (const data of deliveriesData) {
     const dataWithDeliveryDate = {
       ...data,
-      deliveryTime: addRandomDateTime(),
+      deliveryDate: addRandomDateTime(),
     };
     await prisma.delivery.create({ data: dataWithDeliveryDate });
   }

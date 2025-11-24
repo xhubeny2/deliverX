@@ -12,7 +12,7 @@ export async function getTodaysDeliveries(): Promise<number> {
 
     return prisma.delivery.count({
       where: {
-        deliveryTime: {
+        deliveryDate: {
           gte: startOfDay,
           lte: endOfDay,
         },
@@ -26,7 +26,7 @@ export async function getTodaysUnassignedDeliveries(): Promise<number> {
   const fn = async () => {
     return prisma.delivery.count({
       where: {
-        deliveryTime: {
+        deliveryDate: {
           gte: startOfDay,
           lte: endOfDay,
         },

@@ -16,7 +16,7 @@ export const driversData: DriverFormValues[] = [
   },
 ];
 
-export const deliveriesData: DeliveryFormValues[] = [
+export const deliveriesData: Omit<DeliveryFormValues, 'deliveryDate'>[] = [
   {
     recipientName: 'Jan Novák',
     address: 'Wolkerova 12, Prostějov',
