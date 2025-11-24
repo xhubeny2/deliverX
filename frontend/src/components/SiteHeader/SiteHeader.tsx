@@ -8,13 +8,16 @@ export function SiteHeader() {
       <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
         <SidebarTrigger className="-ml-1" />
         <Separator orientation="vertical" className="mx-2 data-[orientation=vertical]:h-4" />
-        <h1 className="text-base font-medium">Documents</h1>
+        <div className="flex items-end">
+          <h1 className="text-base font-medium">DeliverX</h1>
+          <div className="text-gray-500 text-sm ml-2">Plan routes fast. Deliver faster!</div>
+        </div>
         <div className="ml-auto flex items-center gap-2">
-          <Button variant="ghost" asChild size="sm" className="hidden sm:flex">
-            <a href="#" rel="noopener noreferrer" target="_blank" className="dark:text-foreground">
-              Todo: Dark mode
-            </a>
-          </Button>
+          {/*<Button variant="ghost" asChild size="sm" className="hidden sm:flex">*/}
+          {/*  <a href="#" rel="noopener noreferrer" target="_blank" className="dark:text-foreground">*/}
+          {/*    Todo: Dark mode*/}
+          {/*  </a>*/}
+          {/*</Button>*/}
         </div>
       </div>
     </header>
