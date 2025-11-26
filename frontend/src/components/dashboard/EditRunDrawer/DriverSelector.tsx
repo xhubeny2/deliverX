@@ -3,10 +3,9 @@
 import { Driver } from '@/prisma/generated/client';
 import { IconAlertCircle } from '@tabler/icons-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Skeleton } from '@/components/ui/skeleton';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { FormControl, FormItem, FormLabel } from '@/components/ui/form';
-import DriverDetail from '@/components/EditRunDrawer/DriverDetail';
+import { DriverDetail, DriverDetailSkeleton } from './index';
 
 interface DriverSelectorProps {
   drivers: Driver[];
@@ -20,16 +19,7 @@ export function DriverSelector({ drivers, isLoading, value, onValueChange }: Dri
     return (
       <div className="space-y-3">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="flex items-center justify-between p-3 border rounded-lg">
-            <div className="flex items-center gap-3">
-              <Skeleton className="size-10 rounded-full" />
-              <div className="space-y-2">
-                <Skeleton className="h-4 w-32" />
-                <Skeleton className="h-3 w-20" />
-              </div>
-            </div>
-            <Skeleton className="size-5 rounded-full" />
-          </div>
+          <DriverDetailSkeleton key={i} />
         ))}
       </div>
     );

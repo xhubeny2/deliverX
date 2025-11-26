@@ -1,5 +1,5 @@
 import React from 'react';
-import DeliveriesTable from '@/components/DeliveriesTable/DeliveriesTable';
+import DeliveriesTable from '@/components/deliveries/DeliveriesTable/DeliveriesTable';
 import { getAllDeliveries } from '@/lib/data';
 
 export async function DeliveriesTableWrapper() {

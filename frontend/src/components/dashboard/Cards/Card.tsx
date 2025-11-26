@@ -11,7 +11,7 @@ export interface CardProps {
   type?: 'warning' | 'success' | 'default';
 }
 
-export default function Card({
+export function Card({
   title,
   value,
   subValue,

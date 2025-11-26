@@ -1,5 +1,5 @@
 import React from 'react';
-import Card, { CardProps } from '@/components/DashboardCards/Card';
+import { CardProps, Card } from '.';
 import {
   IconPackage,
   IconMapPinX,
@@ -31,7 +31,7 @@ const cardData = [
   },
 ];
 
-export default async function DashboardCards() {
+export async function Cards() {
   const {
     todaysDeliveries,
     unassignedDeliveries,

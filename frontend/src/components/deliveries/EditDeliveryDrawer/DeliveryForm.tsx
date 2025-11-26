@@ -32,6 +32,7 @@ import { DeliveryFormSchema, DeliveryFormValues } from '@/lib/validations';
 import { Delivery } from '@/prisma/generated/client';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
+import { HistorySection } from '@/components/deliveries/EditDeliveryDrawer/HistorySection';
 
 interface DeliveryFormProps {
   initialData?: Delivery;
@@ -213,25 +214,7 @@ export function DeliveryForm({ initialData, onClose }: DeliveryFormProps) {
 
         {/* History Section */}
         {initialData && (
-          <div className="mt-4 border-t pt-4">
-            <h3 className="text-sm font-medium mb-2">History</h3>
-            <div className="text-sm text-muted-foreground space-y-2">
-              <div className="flex justify-between">
-                <span>Created</span>
-                <span>{`${new Date(initialData.createdAt).toLocaleTimeString()} ${new Date(
-                  initialData.createdAt,
-                ).toLocaleDateString()}`}</span>
-              </div>
-              {initialData.updatedAt && (
-                <div className="flex justify-between">
-                  <span>Updated</span>
-                  <span>{`${new Date(initialData.updatedAt).toLocaleTimeString()} ${new Date(
-                    initialData.updatedAt,
-                  ).toLocaleDateString()}`}</span>
-                </div>
-              )}
-            </div>
-          </div>
+          <HistorySection createdAt={initialData.createdAt} updatedAt={initialData.updatedAt} />
         )}
       </div>
     </div>

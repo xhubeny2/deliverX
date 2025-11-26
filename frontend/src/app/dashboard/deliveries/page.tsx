@@ -1,15 +1,17 @@
 import React, { Suspense } from 'react';
 // import { api } from '@/lib/api';
-import { DeliveriesTableWrapper } from '@/components/DeliveriesTable/DeliveriesTableWrapper';
-import EditDeliveryDrawer from '@/components/EditDeliveryDrawer/EditDeliveryDrawer';
-import { DashboardHeader } from '@/components/DashboardHeader/DashboardHeader';
+import EditDeliveryDrawer from '@/components/deliveries/EditDeliveryDrawer/EditDeliveryDrawer';
+import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
+import {
+  DeliveriesTableSkeleton,
+  DeliveriesTableWrapper,
+} from '@/components/deliveries/DeliveriesTable';
 
 export default async function DeliveriesPage() {
   return (
     <div className="flex-1 space-y-8 pt-2">
       <DashboardHeader heading="Deliveries" text="Management and tracking of all parcels" />
-      {/*TODO: udelat skeleton*/}
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<DeliveriesTableSkeleton />}>
         <DeliveriesTableWrapper />
       </Suspense>
 

@@ -8,7 +8,7 @@ const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
 export async function getTodaysDeliveries(): Promise<number> {
   const fn = async () => {
     // Slow network simulation
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    //await new Promise((resolve) => setTimeout(resolve, 2000));
 
     return prisma.delivery.count({
       where: {
@@ -25,7 +25,7 @@ export async function getTodaysDeliveries(): Promise<number> {
 export async function getTodaysFinishedDeliveries(): Promise<number> {
   const fn = async () => {
     // Slow network simulation
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    //await new Promise((resolve) => setTimeout(resolve, 2000));
 
     return prisma.delivery.count({
       where: {
@@ -121,7 +121,7 @@ export async function getDriversWithTodayRuns() {
     const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
 
     // Slow network simulation
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+    // await new Promise((resolve) => setTimeout(resolve, 3000));
 
     return prisma.driver.findMany({
       include: {

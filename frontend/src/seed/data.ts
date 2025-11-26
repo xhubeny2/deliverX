@@ -307,7 +307,7 @@ export const deliveriesData: Omit<DeliveryFormValues, 'deliveryDate'>[] = [
     recipientName: 'Karel Jon',
     address: 'Hlavní 29, Bohuslavice',
     orderNumber: 'ORD-1057',
-    status: 'PENDING',
+    status: 'DELIVERED',
   },
   {
     recipientName: 'Irena Mašková',

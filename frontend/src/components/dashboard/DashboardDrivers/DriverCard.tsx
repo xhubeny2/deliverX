@@ -12,7 +12,7 @@ import Link from 'next/link';
 import { getAvatar } from '@/utils/getAvatar';
 import { useQueryStates, parseAsString } from 'nuqs';
 
-type RunWithDeliveries = Run & {
+export type RunWithDeliveries = Run & {
   deliveries: {
     status: string;
     address: string;
@@ -23,7 +23,7 @@ export type DriverCardProps = Driver & {
   runs: RunWithDeliveries[];
 };
 
-export default function DriverCard({ name, car, runs, id }: DriverCardProps) {
+export function DriverCard({ name, car, runs, id }: DriverCardProps) {
   const [, setParams] = useQueryStates({
     action: parseAsString,
     driverId: parseAsString,

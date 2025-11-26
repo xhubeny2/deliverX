@@ -1,4 +1,4 @@
-import prisma from '@/lib/prisma';
+import { prisma } from '@/lib/prisma';
 import { Delivery } from '@/prisma/generated/client';
 
 export async function getAllDeliveries(): Promise<Delivery[] | null> {

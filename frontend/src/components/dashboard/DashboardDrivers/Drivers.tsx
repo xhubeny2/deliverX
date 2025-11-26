@@ -1,8 +1,8 @@
 import React from 'react';
-import DriverCard from '@/components/DashboardDrivers/DriverCard';
+import { DriverCard } from '.';
 import { getDriversWithTodayRuns } from '@/lib/data';
 
-export default async function Drivers() {
+export async function Drivers() {
   const drivers = await getDriversWithTodayRuns();
   if (!drivers) {
     return <div>No drivers data available.</div>;

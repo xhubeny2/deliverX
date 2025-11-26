@@ -10,7 +10,7 @@ interface DriverCardProps {
   className?: string;
 }
 
-export default function DriverDetail({ driver, isSelected, className }: DriverCardProps) {
+export function DriverDetail({ driver, isSelected, className }: DriverCardProps) {
   return (
     <div
       className={cn(
@@ -45,7 +45,7 @@ export default function DriverDetail({ driver, isSelected, className }: DriverCa
         </div>
       </div>
 
-      {/* Custom Visual Radio Indicator */}
+      {/* Radio Button */}
       <div
         className={cn(
           'size-5 rounded-full border flex items-center justify-center transition-colors',
