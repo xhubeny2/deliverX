@@ -24,6 +24,7 @@ interface GenerateRidesSheetProps {
   onClose: () => void;
   isLoading: boolean;
   unassignedDeliveriesCount: number;
+  selectedDriverId?: string;
 }
 
 export default function RunForm({
@@ -32,6 +33,7 @@ export default function RunForm({
   isLoading,
   unassignedDeliveriesCount,
   onClose,
+  selectedDriverId,
 }: GenerateRidesSheetProps) {
   const [step, setStep] = useState<Step>('config');
   const [isPending, startTransition] = useTransition();
@@ -39,7 +41,7 @@ export default function RunForm({
   const form = useForm<RunFormValues>({
     resolver: zodResolver(RunFormSchema),
     defaultValues: {
-      driverId: '',
+      driverId: selectedDriverId || '',
     },
   });
 
@@ -53,7 +55,7 @@ export default function RunForm({
         deliveryDate: delivery.deliveryDate,
       }));
       generateOptimizedRun(data.driverId, deliveriesToAI)
-        .then((response) => {
+        .then(() => {
           toast.success('Ride generated successfully!');
           onClose();
         })

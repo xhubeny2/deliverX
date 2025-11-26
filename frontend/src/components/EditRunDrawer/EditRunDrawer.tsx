@@ -15,6 +15,7 @@ import { useQueryState } from 'nuqs';
 export default function EditRunDrawer() {
   const isMobile = useIsMobile();
   const [action, setAction] = useQueryState('action');
+  const [driverId, setDriverId] = useQueryState('driverId');
 
   const isOpen = action === 'generate';
 
@@ -25,6 +26,7 @@ export default function EditRunDrawer() {
 
   const handleOpenChange = (open: boolean) => {
     setAction(open ? 'generate' : null);
+    setDriverId(open ? null : null);
   };
 
   const handleClose = () => handleOpenChange(false);
@@ -54,6 +56,7 @@ export default function EditRunDrawer() {
             onClose={handleClose}
             isLoading={isLoading}
             unassignedDeliveriesCount={data.unassignedDeliveriesCount}
+            selectedDriverId={driverId || undefined}
           />
         )}
       </DrawerContent>

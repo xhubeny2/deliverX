@@ -1,5 +1,5 @@
 import React from 'react';
-import Card from '@/components/DashboardCards/Card';
+import Card, { CardProps } from '@/components/DashboardCards/Card';
 import {
   IconPackage,
   IconMapPinX,
@@ -11,7 +11,7 @@ import { getCardsData } from '@/lib/data';
 // Sample data for the cards
 const cardData = [
   {
-    title: 'To deliver today',
+    title: 'To deliver',
     icon: IconPackage,
     description: 'parcels in total',
   },
@@ -25,26 +25,39 @@ const cardData = [
     icon: IconSteeringWheel,
   },
   {
-    title: 'Success rate (TODO)',
+    title: 'Delivered',
     icon: IconTruckDelivery,
-    description: '+2% compared to yesterday',
+    description: 'finished deliveries',
   },
 ];
 
 export default async function DashboardCards() {
-  const { todaysDeliveries, unassignedDeliveries, activeDrivers, totalDrivers } =
-    await getCardsData();
+  const {
+    todaysDeliveries,
+    unassignedDeliveries,
+    activeDrivers,
+    totalDrivers,
+    finishedDeliveries,
+  } = await getCardsData();
 
-  const liveCardData = [
+  const liveCardData: CardProps[] = [
     { ...cardData[0], value: todaysDeliveries },
-    { ...cardData[1], value: unassignedDeliveries, warning: unassignedDeliveries > 0 },
+    {
+      ...cardData[3],
+      value: finishedDeliveries,
+      type: finishedDeliveries > 0 ? 'success' : 'default',
+    },
+    {
+      ...cardData[1],
+      value: unassignedDeliveries,
+      type: unassignedDeliveries > 0 ? 'warning' : 'default',
+    },
     {
       ...cardData[2],
       value: activeDrivers,
       subValue: ` / ${totalDrivers}`,
       description: `${totalDrivers - activeDrivers} drivers are off`,
     },
-    { ...cardData[3], value: '98%' },
   ];
 
   return (

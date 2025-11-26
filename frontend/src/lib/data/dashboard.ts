@@ -22,6 +22,24 @@ export async function getTodaysDeliveries(): Promise<number> {
   return withTryCatch(fn, 'Delivery read error:', 0);
 }
 
+export async function getTodaysFinishedDeliveries(): Promise<number> {
+  const fn = async () => {
+    // Slow network simulation
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    return prisma.delivery.count({
+      where: {
+        status: 'DELIVERED',
+        deliveryDate: {
+          gte: startOfDay,
+          lt: endOfDay,
+        },
+      },
+    });
+  };
+  return withTryCatch(fn, 'Delivery read error:', 0);
+}
+
 export async function getTodaysUnassignedDeliveries(): Promise<number> {
   const fn = async () => {
     return prisma.delivery.count({
@@ -65,20 +83,26 @@ export async function getTotalDrivers(): Promise<number> {
 
 export async function getCardsData() {
   const fn = async () => {
-    const [todaysDeliveries, unassignedDeliveries, activeDrivers, totalDrivers] = await Promise.all(
-      [
-        getTodaysDeliveries(),
-        getTodaysUnassignedDeliveries(),
-        getTodaysActiveDrivers(),
-        getTotalDrivers(),
-      ],
-    );
+    const [
+      todaysDeliveries,
+      unassignedDeliveries,
+      activeDrivers,
+      totalDrivers,
+      finishedDeliveries,
+    ] = await Promise.all([
+      getTodaysDeliveries(),
+      getTodaysUnassignedDeliveries(),
+      getTodaysActiveDrivers(),
+      getTotalDrivers(),
+      getTodaysFinishedDeliveries(),
+    ]);
 
     return {
       todaysDeliveries,
       unassignedDeliveries,
       activeDrivers,
       totalDrivers,
+      finishedDeliveries,
     };
   };
   return withTryCatch(fn, 'Dashboard read error:', {
@@ -86,6 +110,7 @@ export async function getCardsData() {
     unassignedDeliveries: 0,
     activeDrivers: 0,
     totalDrivers: 0,
+    finishedDeliveries: 0,
   });
 }
 
