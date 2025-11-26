@@ -31,7 +31,7 @@ export default function LoginForm() {
         <div className="flex items-center justify-between">
           <Label htmlFor="password">Password</Label>
         </div>
-        <Input id="password" type="password" name="password" required defaultValue="password" />
+        <Input id="password" type="password" name="password" required defaultValue="123456" />
       </div>
       <input type="hidden" name="redirectTo" value={callbackUrl} />
       <Button type="submit" className="w-full mt-2" aria-disabled={isPending}>
