@@ -1,7 +1,7 @@
 'use client';
 
 import { useOptimistic, useTransition } from 'react';
-import { Delivery, Run, Driver } from '@/../generated/prisma/client';
+import { Delivery, Run, Driver } from '@/prisma/generated/client';
 import { IconPackage } from '@tabler/icons-react';
 import { toast } from 'sonner';
 import { Progress } from '@/components/ui/progress';

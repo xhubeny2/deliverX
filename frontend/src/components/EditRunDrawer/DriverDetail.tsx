@@ -1,6 +1,6 @@
 'use client';
 
-import { Driver } from '@/../generated/prisma/client';
+import { Driver } from '@/prisma/generated/client';
 import { IconSteeringWheel } from '@tabler/icons-react';
 import { cn } from '@/lib/utils';
 

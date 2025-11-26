@@ -4,7 +4,7 @@ import { useState, useTransition } from 'react';
 import { IconSparkles, IconCalendar, IconMapPinX } from '@tabler/icons-react';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
-import { Driver, Delivery } from '@/../generated/prisma/client';
+import { Driver, Delivery } from '@/prisma/generated/client';
 
 import { Button } from '@/components/ui/button';
 import { SheetFooter } from '@/components/ui/sheet';

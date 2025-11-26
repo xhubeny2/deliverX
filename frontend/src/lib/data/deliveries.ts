@@ -1,5 +1,5 @@
 import prisma from '@/lib/prisma';
-import { Delivery } from '@/../generated/prisma/client';
+import { Delivery } from '@/prisma/generated/client';
 
 export async function getAllDeliveries(): Promise<Delivery[] | null> {
   try {
