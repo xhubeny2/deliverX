@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { SidebarTrigger } from '@/components/ui/sidebar';
+import { signOut } from '@/auth';
 
 export function SiteHeader() {
   return (
@@ -13,11 +14,16 @@ export function SiteHeader() {
           <div className="text-gray-500 text-sm ml-2">Plan routes fast. Deliver faster!</div>
         </div>
         <div className="ml-auto flex items-center gap-2">
-          {/*<Button variant="ghost" asChild size="sm" className="hidden sm:flex">*/}
-          {/*  <a href="#" rel="noopener noreferrer" target="_blank" className="dark:text-foreground">*/}
-          {/*    Todo: Dark mode*/}
-          {/*  </a>*/}
-          {/*</Button>*/}
+          <form
+            action={async () => {
+              'use server';
+              await signOut({ redirectTo: '/login' });
+            }}
+          >
+            <Button variant="ghost" size="sm" className="hidden sm:flex">
+              Sign Out
+            </Button>
+          </form>
         </div>
       </div>
     </header>

@@ -1,5 +1,6 @@
 import { PrismaClient } from '@/../generated/prisma/client';
-import { deliveriesData, driversData } from './data';
+import { deliveriesData, driversData, usersData } from './data';
+import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
@@ -50,9 +51,25 @@ async function seedDrivers() {
   console.log(`Seed completed. Created ${driversData.length} Drivers. ✅`);
 }
 
+async function seedUsers() {
+  console.log('Start seeding Users... 🌱');
+
+  // 1. Clean up
+  await prisma.user.deleteMany();
+  console.log('Cleaned up existing users. 🧹');
+
+  // 2. New users
+  for (const data of usersData) {
+    await prisma.user.create({ data: { ...data, password: await bcrypt.hash(data.password, 10) } });
+  }
+
+  console.log(`Seed completed. Created ${usersData.length} Users. ✅`);
+}
+
 async function main() {
   await seedDeliveries();
   await seedDrivers();
+  await seedUsers();
 }
 
 main()

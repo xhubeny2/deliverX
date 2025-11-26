@@ -1,6 +1,19 @@
 import { DeliveryFormValues } from '@/lib/validations';
 import { DriverFormValues } from '@/lib/validations/driver-schema';
 
+export const usersData = [
+  {
+    name: 'Pavel Dispečer',
+    email: 'dispecer@deliverx.com',
+    password: '123456',
+  },
+  {
+    name: 'Pepa Řidič',
+    email: 'ridic@deliverx.com',
+    password: '123456',
+  },
+];
+
 export const driversData: DriverFormValues[] = [
   {
     name: 'Pepa Novák',
