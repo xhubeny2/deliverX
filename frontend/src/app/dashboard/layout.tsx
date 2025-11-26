@@ -1,9 +1,6 @@
 import React from 'react';
 import { AppSidebar } from '@/components/Sidebar/AppSidebar';
-import { ChartAreaInteractive } from '@/components/chart-area-interactive';
-import { DataTable } from '@/components/data-table';
-import { SectionCards } from '@/components/section-cards';
-import { SiteHeader } from '@/components/site-header';
+import { SiteHeader } from '@/components/SiteHeader/SiteHeader';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
@@ -19,7 +16,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <AppSidebar variant="inset" />
       <SidebarInset>
         <SiteHeader />
-        <div className="flex flex-1 flex-col px-4 md:px-8 lg:px-10">
+        <div className="flex flex-1 flex-col px-5 md:px-10 lg:px-16">
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">{children}</div>
           </div>

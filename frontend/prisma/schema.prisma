@@ -6,23 +6,41 @@ generator client {
 
 datasource deliverex {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  // url      = env("POSTGRES_PRISMA_URL")
+  url = env("DATABASE_URL")
+}
+
+enum Delivery_Status {
+  PENDING
+  IN_TRANSIT
+  DELIVERED
+  FAILED
+}
+
+enum Run_Status {
+  ACTIVE
+  FINISHED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email       String @unique
+  password      String
 }
 
 model Driver {
   id        String   @id @default(cuid())
   name      String
-  phone     String?
-  active    Boolean  @default(true)
-  // Jeden ridic ma vic jizd
+  car       String
+  // Jeden ridic ma vic jizd - jeho stav se odviji od jizd - ma/nema = active/inactive, atd.
   runs      Run[]
 }
 
 model Run {
   id          String     @id @default(cuid())
   date        DateTime   @default(now())
-  name        String?
-  status      String     @default("PLANNED") // PLANNED, IN_PROGRESS, COMPLETED
+  status      Run_Status     @default(ACTIVE) // ACTIVE, DELAYED, FINISHED
   // Jízda patri jednomu ridici
   driverId    String
   driver      Driver     @relation(fields: [driverId], references: [id])
@@ -32,23 +50,16 @@ model Run {
 
 model Delivery {
   id             String   @id @default(cuid())
-  // cislo pro zakaznika
   orderNumber    String
-  // udaje o doruceni
   recipientName  String
   address        String
-  status         Status   @default(PENDING) // PENDING, IN_TRANSIT, DELIVERED, FAILED
+  status         Delivery_Status   @default(PENDING) // PENDING, IN_TRANSIT, DELIVERED, FAILED
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime? @updatedAt
+  deliveryDate   DateTime
   // Zasilka patri do jedne jizdy (Run)
   // "Run" je volitelny, protoze zasilka muze byt na sklade a cekat na prirazeni
   runId          String?
   run            Run?     @relation(fields: [runId], references: [id])
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime? @updatedAt
-}
-
-enum Status {
-  PENDING
-  IN_TRANSIT
-  DELIVERED
-  FAILED
+  order          Int?
 }

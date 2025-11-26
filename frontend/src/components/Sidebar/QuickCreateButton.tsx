@@ -24,7 +24,6 @@ const QuickCreateButton = () => {
           variant="outline"
         >
           <IconMail />
-          <span className="sr-only">Inbox</span>
         </Button>
       </SidebarMenuItem>
     </SidebarMenu>

@@ -47,7 +47,8 @@ import {
 } from '@/components/ui/table';
 
 import Pagination from '@/components/DeliveriesTable/Pagination';
-import { useRouter } from 'next/navigation';
+import { useQueryState } from 'nuqs';
+import { format } from 'date-fns';
 
 const columns: ColumnDef<Delivery>[] = [
   {
@@ -107,6 +108,15 @@ const columns: ColumnDef<Delivery>[] = [
     ),
   },
   {
+    accessorKey: 'deliveryDate',
+    header: 'Delivery Date',
+    cell: ({ row }) => (
+      <div className="truncate max-w-[100px]" title={format(row.original.deliveryDate, 'PPP')}>
+        {format(row.original.deliveryDate, 'PP')}
+      </div>
+    ),
+  },
+  {
     accessorKey: 'status',
     header: 'Status',
     cell: ({ row }) => {
@@ -136,7 +146,7 @@ const columns: ColumnDef<Delivery>[] = [
   },
   {
     id: 'actions',
-    cell: () => (
+    cell: ({ row, table }) => (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -149,7 +159,9 @@ const columns: ColumnDef<Delivery>[] = [
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-32">
-          <DropdownMenuItem>Edit</DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => table.options.meta?.openEditDrawer(row.original.id)}>
+            Edit
+          </DropdownMenuItem>
           <DropdownMenuItem>Add driver</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
@@ -160,8 +172,6 @@ const columns: ColumnDef<Delivery>[] = [
 ];
 
 export default function DeliveriesTable({ data }: { data: Delivery[] }) {
-  const router = useRouter();
-
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -170,13 +180,15 @@ export default function DeliveriesTable({ data }: { data: Delivery[] }) {
     pageIndex: 0,
     pageSize: 10,
   });
+  const [, setEditId] = useQueryState('editId');
+  const [, setIsCreate] = useQueryState('create');
 
   const handleCreateClick = () => {
-    router.push(`?create=new`);
+    setIsCreate('new');
   };
 
   const handleEditClick = (deliveryId: string) => {
-    router.push(`?editId=${deliveryId}`);
+    setEditId(deliveryId);
   };
 
   const table = useReactTable({

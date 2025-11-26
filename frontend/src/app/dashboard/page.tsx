@@ -1,18 +1,37 @@
-import { SectionCards } from '@/components/section-cards';
+import React, { Suspense } from 'react';
+import { DashboardHeader } from '@/components/DashboardHeader/DashboardHeader';
+import Cards from '@/components/DashboardCards/Cards';
+import Drivers from '@/components/DashboardDrivers/Drivers';
+import { CardsSkeleton } from '@/components/DashboardCards/CardsSkeleton';
+import { DriversSkeleton } from '@/components/DashboardDrivers/DriversSkeleton';
+import EditRunDrawer from '@/components/EditRunDrawer/EditRunDrawer';
+import { GenerateButton } from '@/components/GenerateButton';
 
-import data from './data.json';
-
-const Page = () => {
+export default async function DashboardPage() {
   return (
-    <>
-      <SectionCards />
-      Dashboard page
-    </>
-    // {/*<div className="px-4 lg:px-6">*/}
-    // {/*  <ChartAreaInteractive />*/}
-    // {/*</div>*/}
-    // {/*<DataTable data={data} />*/}
-  );
-};
+    <div className="flex-1 space-y-8 pt-2">
+      <DashboardHeader
+        heading="Dashboard"
+        text={`Today’s Operations Overview - ${new Date().toLocaleDateString()}`}
+      >
+        <GenerateButton />
+      </DashboardHeader>
 
-export default Page;
+      {/* Overview (KPI) */}
+      <Suspense fallback={<CardsSkeleton />}>
+        <Cards />
+      </Suspense>
+
+      {/* Live fleet status */}
+      <div className="space-y-4">
+        <h3 className="text-lg font-semibold">Fleet Status (Live)</h3>
+      </div>
+      <Suspense fallback={<DriversSkeleton />}>
+        <Drivers />
+      </Suspense>
+
+      {/*<GenerateRidesSheet />*/}
+      <EditRunDrawer />
+    </div>
+  );
+}

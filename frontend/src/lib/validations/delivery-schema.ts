@@ -6,6 +6,7 @@ export const DeliveryFormSchema = z.object({
   address: z.string().min(1, 'Required'),
   orderNumber: z.string().min(1, 'Required'),
   status: z.enum(['PENDING', 'IN_TRANSIT', 'DELIVERED', 'FAILED']),
+  deliveryDate: z.date('Required.'),
 });
 
 // Type

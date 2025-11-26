@@ -15,6 +15,7 @@ export async function createDelivery(data: DeliveryFormValues) {
         recipientName: validatedData.recipientName,
         address: validatedData.address,
         status: validatedData.status,
+        deliveryDate: validatedData.deliveryDate,
       },
     });
 
@@ -58,27 +59,3 @@ export async function updateDelivery(id: string, data: DeliveryFormValues) {
     return { success: false, message: 'Failed to create a delivery.' };
   }
 }
-
-// export async function updateDeliveryStatus(deliveryId: string, newStatus: string) {
-//   try {
-//     // Slow network simulation
-//     // await new Promise((resolve) => setTimeout(resolve, 1000));
-//
-//     await prisma.delivery.update({
-//       where: {
-//         id: deliveryId,
-//       },
-//       data: {
-//         status: newStatus,
-//       },
-//     });
-//
-//     revalidatePath('/driver');
-//     revalidatePath('/tracking');
-//
-//     return { success: true };
-//   } catch (error) {
-//     console.error('Delivery update error:', error);
-//     return { success: false, message: 'Cannot update Delivery status.' };
-//   }
-// }
