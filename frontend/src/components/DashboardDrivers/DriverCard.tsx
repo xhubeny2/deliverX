@@ -7,7 +7,7 @@ import { Progress } from '@/components/ui/progress';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Run, Driver } from '@/../generated/prisma/client';
+import { Run, Driver } from '../../../generated/prisma/client';
 import Link from 'next/link';
 import { getAvatar } from '@/utils/getAvatar';
 import { useQueryStates, parseAsString } from 'nuqs';
