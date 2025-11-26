@@ -34,6 +34,10 @@ const config: runtime.GetPrismaClientConfig = {
         "fromEnvVar": null,
         "value": "darwin",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "rhel-openssl-3.0.x"
       }
     ],
     "previewFeatures": [],
@@ -56,8 +60,8 @@ const config: runtime.GetPrismaClientConfig = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client\"\n  output   = \"./generated\"\n}\n\ndatasource deliverex {\n  provider = \"postgresql\"\n  // url      = env(\"POSTGRES_PRISMA_URL\")\n  url      = env(\"DATABASE_URL\")\n}\n\nenum Delivery_Status {\n  PENDING\n  IN_TRANSIT\n  DELIVERED\n  FAILED\n}\n\nenum Run_Status {\n  ACTIVE\n  FINISHED\n}\n\nmodel User {\n  id       String @id @default(cuid())\n  name     String\n  email    String @unique\n  password String\n}\n\nmodel Driver {\n  id   String @id @default(cuid())\n  name String\n  car  String\n  // Jeden ridic ma vic jizd - jeho stav se odviji od jizd - ma/nema = active/inactive, atd.\n  runs Run[]\n}\n\nmodel Run {\n  id         String     @id @default(cuid())\n  date       DateTime   @default(now())\n  status     Run_Status @default(ACTIVE) // ACTIVE, DELAYED, FINISHED\n  // Jízda patri jednomu ridici\n  driverId   String\n  driver     Driver     @relation(fields: [driverId], references: [id])\n  // Jedna jizda ma vic zasilek\n  deliveries Delivery[]\n}\n\nmodel Delivery {\n  id            String          @id @default(cuid())\n  orderNumber   String\n  recipientName String\n  address       String\n  status        Delivery_Status @default(PENDING) // PENDING, IN_TRANSIT, DELIVERED, FAILED\n  createdAt     DateTime        @default(now())\n  updatedAt     DateTime?       @updatedAt\n  deliveryDate  DateTime\n  // Zasilka patri do jedne jizdy (Run)\n  // \"Run\" je volitelny, protoze zasilka muze byt na sklade a cekat na prirazeni\n  runId         String?\n  run           Run?            @relation(fields: [runId], references: [id])\n  order         Int?\n}\n",
-  "inlineSchemaHash": "3ea9f416ed1fa86f9fd7cb400a79f02a7783eaac415dc7f64b5f8445125fc90c",
+  "inlineSchema": "generator client {\n  provider      = \"prisma-client\"\n  output        = \"./generated\"\n  binaryTargets = [\"native\", \"rhel-openssl-3.0.x\"]\n}\n\ndatasource deliverex {\n  provider = \"postgresql\"\n  // url      = env(\"POSTGRES_PRISMA_URL\")\n  url      = env(\"DATABASE_URL\")\n}\n\nenum Delivery_Status {\n  PENDING\n  IN_TRANSIT\n  DELIVERED\n  FAILED\n}\n\nenum Run_Status {\n  ACTIVE\n  FINISHED\n}\n\nmodel User {\n  id       String @id @default(cuid())\n  name     String\n  email    String @unique\n  password String\n}\n\nmodel Driver {\n  id   String @id @default(cuid())\n  name String\n  car  String\n  // Jeden ridic ma vic jizd - jeho stav se odviji od jizd - ma/nema = active/inactive, atd.\n  runs Run[]\n}\n\nmodel Run {\n  id         String     @id @default(cuid())\n  date       DateTime   @default(now())\n  status     Run_Status @default(ACTIVE) // ACTIVE, DELAYED, FINISHED\n  // Jízda patri jednomu ridici\n  driverId   String\n  driver     Driver     @relation(fields: [driverId], references: [id])\n  // Jedna jizda ma vic zasilek\n  deliveries Delivery[]\n}\n\nmodel Delivery {\n  id            String          @id @default(cuid())\n  orderNumber   String\n  recipientName String\n  address       String\n  status        Delivery_Status @default(PENDING) // PENDING, IN_TRANSIT, DELIVERED, FAILED\n  createdAt     DateTime        @default(now())\n  updatedAt     DateTime?       @updatedAt\n  deliveryDate  DateTime\n  // Zasilka patri do jedne jizdy (Run)\n  // \"Run\" je volitelny, protoze zasilka muze byt na sklade a cekat na prirazeni\n  runId         String?\n  run           Run?            @relation(fields: [runId], references: [id])\n  order         Int?\n}\n",
+  "inlineSchemaHash": "70016af656cafaf8e9f3c4b8e766468a4c85d73440b4f67259035a6959371427",
   "copyEngine": true,
   "runtimeDataModel": {
     "models": {},

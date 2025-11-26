@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Delivery } from '../../../generated/prisma/client';
+import { Delivery } from '@/prisma/generated/client';
 import {
   IconCircleCheckFilled,
   IconDotsVertical,

@@ -13,8 +13,9 @@ export default async function DeliveriesPage() {
         <DeliveriesTableWrapper />
       </Suspense>
 
-      {/* Edit Delivery Drawer */}
-      <EditDeliveryDrawer />
+      <Suspense fallback={null}>
+        <EditDeliveryDrawer />
+      </Suspense>
     </div>
   );
 }

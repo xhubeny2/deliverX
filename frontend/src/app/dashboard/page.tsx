@@ -5,7 +5,8 @@ import Drivers from '@/components/DashboardDrivers/Drivers';
 import { CardsSkeleton } from '@/components/DashboardCards/CardsSkeleton';
 import { DriversSkeleton } from '@/components/DashboardDrivers/DriversSkeleton';
 import EditRunDrawer from '@/components/EditRunDrawer/EditRunDrawer';
-import { GenerateButton } from '@/components/GenerateButton';
+import { GenerateButton } from '@/components/dashboard/GenerateButton/GenerateButton';
+import { GenerateButtonSkeleton } from '@/components/dashboard/GenerateButton/GenerateButtonSkeleton';
 
 export default async function DashboardPage() {
   return (
@@ -14,7 +15,9 @@ export default async function DashboardPage() {
         heading="Dashboard"
         text={`Today’s Operations Overview - ${new Date().toLocaleDateString()}`}
       >
-        <GenerateButton />
+        <Suspense fallback={<GenerateButtonSkeleton />}>
+          <GenerateButton />
+        </Suspense>
       </DashboardHeader>
 
       {/* Overview (KPI) */}
@@ -30,8 +33,9 @@ export default async function DashboardPage() {
         <Drivers />
       </Suspense>
 
-      {/*<GenerateRidesSheet />*/}
-      <EditRunDrawer />
+      <Suspense fallback={null}>
+        <EditRunDrawer />
+      </Suspense>
     </div>
   );
 }
