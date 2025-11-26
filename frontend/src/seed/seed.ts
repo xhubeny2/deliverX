@@ -3,7 +3,7 @@ import { deliveriesData, driversData } from './data';
 
 const prisma = new PrismaClient();
 
-function addRandomDateTime(): Date {
+function addRandomDate(): Date {
   // 80% of deliveries for today
   const useToday = Math.random() < 0.8;
 
@@ -27,7 +27,7 @@ async function seedDeliveries() {
   for (const data of deliveriesData) {
     const dataWithDeliveryDate = {
       ...data,
-      deliveryDate: addRandomDateTime(),
+      deliveryDate: addRandomDate(),
     };
     await prisma.delivery.create({ data: dataWithDeliveryDate });
   }

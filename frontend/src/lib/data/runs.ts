@@ -10,6 +10,7 @@ import { prisma } from '@/lib/prisma';
 export async function getRideCreationData() {
   try {
     const now = new Date();
+    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
 
     const [drivers, deliveries] = await Promise.all([
@@ -18,12 +19,23 @@ export async function getRideCreationData() {
         where: {
           runs: {
             none: {
-              date: {
-                lt: endOfDay,
-              },
+              AND: [
+                {
+                  date: {
+                    gte: startOfDay,
+                    lt: endOfDay,
+                  },
+                },
+                {
+                  status: {
+                    not: 'FINISHED',
+                  },
+                },
+              ],
             },
           },
         },
+        orderBy: { name: 'asc' },
       }),
 
       // Fetch actual delivery objects planned for today (Unassigned & Pending)
@@ -32,7 +44,8 @@ export async function getRideCreationData() {
           status: 'PENDING', // Only pending deliveries
           runId: null, // Must be unassigned
           deliveryDate: {
-            // Scheduled for today or days before
+            // Scheduled for today
+            gte: startOfDay,
             lt: endOfDay,
           },
         },

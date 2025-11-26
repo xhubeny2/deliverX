@@ -48,6 +48,7 @@ import {
 
 import Pagination from '@/components/DeliveriesTable/Pagination';
 import { useQueryState } from 'nuqs';
+import { format } from 'date-fns';
 
 const columns: ColumnDef<Delivery>[] = [
   {
@@ -103,6 +104,15 @@ const columns: ColumnDef<Delivery>[] = [
     cell: ({ row }) => (
       <div className="truncate max-w-[200px]" title={row.original.address}>
         {row.original.address}
+      </div>
+    ),
+  },
+  {
+    accessorKey: 'deliveryDate',
+    header: 'Delivery Date',
+    cell: ({ row }) => (
+      <div className="truncate max-w-[100px]" title={format(row.original.deliveryDate, 'PPP')}>
+        {format(row.original.deliveryDate, 'PP')}
       </div>
     ),
   },

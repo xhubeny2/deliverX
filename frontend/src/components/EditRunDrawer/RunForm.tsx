@@ -55,7 +55,6 @@ export default function RunForm({
       generateOptimizedRun(data.driverId, deliveriesToAI)
         .then((response) => {
           toast.success('Ride generated successfully!');
-          console.log(response);
           onClose();
         })
         .catch(() => {

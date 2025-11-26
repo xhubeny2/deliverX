@@ -1,5 +1,4 @@
 import prisma from '@/lib/prisma';
-import { Driver, Run } from '@/../generated/prisma/client';
 import { withTryCatch } from '@/lib/utils';
 
 const now = new Date();
@@ -8,13 +7,14 @@ const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
 
 export async function getTodaysDeliveries(): Promise<number> {
   const fn = async () => {
+    // Slow network simulation
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
     return prisma.delivery.count({
       where: {
         deliveryDate: {
           gte: startOfDay,
-          lte: endOfDay,
+          lt: endOfDay,
         },
       },
     });
@@ -28,9 +28,10 @@ export async function getTodaysUnassignedDeliveries(): Promise<number> {
       where: {
         deliveryDate: {
           gte: startOfDay,
-          lte: endOfDay,
+          lt: endOfDay,
         },
         runId: null,
+        status: 'PENDING',
       },
     });
   };
@@ -62,15 +63,6 @@ export async function getTotalDrivers(): Promise<number> {
   return withTryCatch(fn, 'Drivers read error:', 0);
 }
 
-export async function getDrivers(): Promise<Driver[] | null> {
-  const fn = async () => {
-    // delay
-    // await new Promise((resolve) => setTimeout(resolve, 3000));
-    return prisma.driver.findMany();
-  };
-  return withTryCatch(fn, 'Drivers read error:', null);
-}
-
 export async function getCardsData() {
   const fn = async () => {
     const [todaysDeliveries, unassignedDeliveries, activeDrivers, totalDrivers] = await Promise.all(
@@ -97,25 +89,14 @@ export async function getCardsData() {
   });
 }
 
-export async function getTodaysRuns(): Promise<Run[] | null> {
-  const fn = async () => {
-    return prisma.run.findMany({
-      where: {
-        date: {
-          gte: startOfDay,
-          lt: endOfDay,
-        },
-      },
-    });
-  };
-  return withTryCatch(fn, 'Runs read error:', []);
-}
-
 export async function getDriversWithTodayRuns() {
   try {
     const now = new Date();
     const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+
+    // Slow network simulation
+    await new Promise((resolve) => setTimeout(resolve, 3000));
 
     return prisma.driver.findMany({
       include: {

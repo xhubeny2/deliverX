@@ -18,18 +18,6 @@ export const driversData: DriverFormValues[] = [
 
 export const deliveriesData: Omit<DeliveryFormValues, 'deliveryDate'>[] = [
   {
-    recipientName: 'Jan Novák',
-    address: 'Wolkerova 12, Prostějov',
-    orderNumber: 'ORD-1001',
-    status: 'PENDING',
-  },
-  {
-    recipientName: 'Petra Dvořáková',
-    address: 'Smetanova 5, Plumlov',
-    orderNumber: 'ORD-1002',
-    status: 'PENDING',
-  },
-  {
     recipientName: 'Tomáš Beneš',
     address: 'Náměstí T. G. Masaryka 8, Kostelec na Hané',
     orderNumber: 'ORD-1003',
@@ -39,7 +27,7 @@ export const deliveriesData: Omit<DeliveryFormValues, 'deliveryDate'>[] = [
     recipientName: 'Lucie Králová',
     address: 'Olomoucká 42, Držovice',
     orderNumber: 'ORD-1004',
-    status: 'FAILED',
+    status: 'PENDING',
   },
   {
     recipientName: 'Michal Horák',
@@ -111,60 +99,6 @@ export const deliveriesData: Omit<DeliveryFormValues, 'deliveryDate'>[] = [
     recipientName: 'Martin Šeda',
     address: 'Lipová 18, Čelechovice na Hané',
     orderNumber: 'ORD-1016',
-    status: 'PENDING',
-  },
-  {
-    recipientName: 'Eliška Veselá',
-    address: 'Tyršova 4, Lutín',
-    orderNumber: 'ORD-1017',
-    status: 'PENDING',
-  },
-  {
-    recipientName: 'Václav Konečný',
-    address: 'Nová 7, Laškov',
-    orderNumber: 'ORD-1018',
-    status: 'IN_TRANSIT',
-  },
-  {
-    recipientName: 'Monika Hradilová',
-    address: 'Háj 3, Určice',
-    orderNumber: 'ORD-1019',
-    status: 'PENDING',
-  },
-  {
-    recipientName: 'Daniel Krejčí',
-    address: 'Sportovní 11, Bousín',
-    orderNumber: 'ORD-1020',
-    status: 'PENDING',
-  },
-  {
-    recipientName: 'Alena Krupová',
-    address: 'Pod Kostelem 9, Olšany u Prostějova',
-    orderNumber: 'ORD-1021',
-    status: 'PENDING',
-  },
-  {
-    recipientName: 'Pavel Šustek',
-    address: 'Zahradní 34, Lutín',
-    orderNumber: 'ORD-1022',
-    status: 'PENDING',
-  },
-  {
-    recipientName: 'Ivana Marková',
-    address: 'Tovární 12, Prostějov',
-    orderNumber: 'ORD-1023',
-    status: 'PENDING',
-  },
-  {
-    recipientName: 'Filip Krčmář',
-    address: 'Svatoplukova 21, Prostějov',
-    orderNumber: 'ORD-1024',
-    status: 'PENDING',
-  },
-  {
-    recipientName: 'Radka Zlámalová',
-    address: 'Mlýnská 5, Plumlov',
-    orderNumber: 'ORD-1025',
     status: 'PENDING',
   },
   {
@@ -388,42 +322,6 @@ export const deliveriesData: Omit<DeliveryFormValues, 'deliveryDate'>[] = [
     status: 'PENDING',
   },
   {
-    recipientName: 'Radim Kroupa',
-    address: 'Kostelecká 18, Prostějov',
-    orderNumber: 'ORD-1062',
-    status: 'PENDING',
-  },
-  {
-    recipientName: 'Johana Vítková',
-    address: 'U Kapličky 5, Mostkovice',
-    orderNumber: 'ORD-1063',
-    status: 'PENDING',
-  },
-  {
-    recipientName: 'Štěpán Mach',
-    address: 'Na Kopci 12, Plumlov',
-    orderNumber: 'ORD-1064',
-    status: 'PENDING',
-  },
-  {
-    recipientName: 'Eva Holubová',
-    address: 'Smetanova 2, Určice',
-    orderNumber: 'ORD-1065',
-    status: 'PENDING',
-  },
-  {
-    recipientName: 'Petr Bezděk',
-    address: 'Nádražní 4, Čechy pod Kosířem',
-    orderNumber: 'ORD-1066',
-    status: 'PENDING',
-  },
-  {
-    recipientName: 'Linda Kabelová',
-    address: 'Hlavní 19, Lutín',
-    orderNumber: 'ORD-1067',
-    status: 'PENDING',
-  },
-  {
     recipientName: 'Lukáš Veselý',
     address: 'U Rybníka 1, Třebčín',
     orderNumber: 'ORD-1068',
@@ -488,25 +386,6 @@ export const deliveriesData: Omit<DeliveryFormValues, 'deliveryDate'>[] = [
     recipientName: 'Michal Dolejš',
     address: 'Wolkerova 36, Prostějov',
     orderNumber: 'ORD-1078',
-    status: 'PENDING',
-  },
-  {
-    recipientName: 'Lucie Švihálková',
-    address: 'Majakovského 4, Prostějov',
-    orderNumber: 'ORD-1079',
-    status: 'PENDING',
-  },
-  {
-    recipientName: 'Patrik Sedláček',
-    address: 'Svatoplukova 11, Prostějov',
-    orderNumber: 'ORD-1080',
-    status: 'PENDING',
-  },
-
-  {
-    recipientName: 'Natálie Vocetková',
-    address: 'Vodní 9, Němčice nad Hanou',
-    orderNumber: 'ORD-1081',
     status: 'PENDING',
   },
   {
@@ -610,25 +489,6 @@ export const deliveriesData: Omit<DeliveryFormValues, 'deliveryDate'>[] = [
     recipientName: 'Daniel Adam',
     address: 'Hlavní 6, Lešany',
     orderNumber: 'ORD-1098',
-    status: 'PENDING',
-  },
-  {
-    recipientName: 'Barbora Rozsívalová',
-    address: 'Krátká 2, Plumlov',
-    orderNumber: 'ORD-1099',
-    status: 'PENDING',
-  },
-  {
-    recipientName: 'Roman Vlk',
-    address: 'Kollárova 12, Prostějov',
-    orderNumber: 'ORD-1100',
-    status: 'PENDING',
-  },
-
-  {
-    recipientName: 'Milan Kameník',
-    address: 'Vodní 5, Tovačov',
-    orderNumber: 'ORD-1101',
     status: 'PENDING',
   },
   {

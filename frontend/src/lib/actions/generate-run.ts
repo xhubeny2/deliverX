@@ -48,6 +48,8 @@ export async function generateOptimizedRun(
 
     const result = await model.generateContent(prompt);
     const responseText = result.response.text();
+
+    // Parse Gemini Response
     const optimizedRoute = JSON.parse(responseText);
 
     // Save to Database (Transaction)
