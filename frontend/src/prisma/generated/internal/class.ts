@@ -51,7 +51,6 @@ const config: runtime.GetPrismaClientConfig = {
     "deliverex"
   ],
   "activeProvider": "postgresql",
-  "postinstall": false,
   "inlineDatasources": {
     "deliverex": {
       "url": {

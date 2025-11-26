@@ -1,8 +1,6 @@
 'use client';
 
-import { useTransition } from 'react';
 import { IconSparkles, IconCalendar, IconMapPinX } from '@tabler/icons-react';
-import { toast } from 'sonner';
 import { format } from 'date-fns';
 import { useForm } from 'react-hook-form';
 import { Driver, Delivery } from '@/prisma/generated/client';
@@ -12,8 +10,8 @@ import { DrawerFooter } from '@/components/ui/drawer';
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RunFormSchema, RunFormValues } from '@/lib/validations/run-schema';
-import { generateOptimizedRun } from '@/lib/actions/generate-run';
 import { AILoading, DriverSelector } from './index';
+import { useRideGeneration } from '@/context/RunGenerationContext';
 
 interface GenerateRidesSheetProps {
   drivers: Driver[];
@@ -32,7 +30,7 @@ export function RunForm({
   onClose,
   selectedDriverId,
 }: GenerateRidesSheetProps) {
-  const [isPending, startTransition] = useTransition();
+  const { startGeneration, isGenerating } = useRideGeneration();
 
   const form = useForm<RunFormValues>({
     resolver: zodResolver(RunFormSchema),
@@ -44,27 +42,19 @@ export function RunForm({
   const selectedDriver = form.watch('driverId');
 
   function onSubmit(data: RunFormValues) {
-    startTransition(async () => {
-      const deliveriesToAI = deliveries.map((delivery) => ({
-        id: delivery.id,
-        address: delivery.address,
-        deliveryDate: delivery.deliveryDate,
-      }));
-      generateOptimizedRun(data.driverId, deliveriesToAI)
-        .then(() => {
-          toast.success('Ride generated successfully!');
-          onClose();
-        })
-        .catch(() => {
-          toast.error('Failed to generate ride. Please try again.');
-        });
-    });
+    const deliveriesToAI = deliveries.map((delivery) => ({
+      id: delivery.id,
+      address: delivery.address,
+      deliveryDate: delivery.deliveryDate,
+    }));
+
+    startGeneration(data.driverId, deliveriesToAI);
   }
 
   return (
     <div className="flex flex-col h-full">
       {/* Animation loader */}
-      {isPending ? (
+      {isGenerating ? (
         <AILoading unassignedDeliveriesCount={unassignedDeliveriesCount} />
       ) : (
         <div className="flex flex-col gap-4 p-4 overflow-y-auto flex-1">
@@ -123,7 +113,7 @@ export function RunForm({
               </div>
 
               <DrawerFooter className="mt-auto pt-4 border-t">
-                {!isPending && (
+                {!isGenerating && (
                   <Button
                     type="submit"
                     className="w-full bg-yellow-400 text-black hover:bg-yellow-500 shadow-sm"

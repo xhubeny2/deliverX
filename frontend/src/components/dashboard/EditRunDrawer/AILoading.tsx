@@ -12,7 +12,10 @@ export function AILoading({ unassignedDeliveriesCount }: { unassignedDeliveriesC
       <div className="text-center space-y-2">
         <h3 className="text-xl font-semibold">AI is analyzing traffic patterns...</h3>
         <p className="text-muted-foreground text-sm">
-          Assigning {unassignedDeliveriesCount} packages to optimal route. It may take a minute.
+          Assigning {unassignedDeliveriesCount} packages to optimal route.
+        </p>
+        <p className="text-muted-foreground text-sm">
+          It may take a minute. You can continue working.
         </p>
       </div>
     </div>
