@@ -12,7 +12,7 @@ import {
 import { DeliveryForm } from './DeliveryForm';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { fetcher } from '@/lib/utils';
-import { Delivery } from '@/../generated/prisma/client';
+import { Delivery } from '@/prisma/generated/client';
 import { Spinner } from '@/components/ui/spinner';
 import { useQueryState } from 'nuqs';
 

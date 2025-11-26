@@ -3,7 +3,7 @@ import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge';
 import { IconCheck, IconMap2, IconPhone, IconX } from '@tabler/icons-react';
 import { Button } from '@/components/ui/button';
-import { Delivery } from '@/../generated/prisma/client';
+import { Delivery } from '@/prisma/generated/client';
 
 interface DeliveryCardProps {
   index: number;

@@ -3,7 +3,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
-import { Delivery } from '@/../generated/prisma/client';
+import { Delivery } from '@/prisma/generated/client';
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || '');
 

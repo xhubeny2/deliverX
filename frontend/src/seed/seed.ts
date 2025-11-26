@@ -1,4 +1,4 @@
-import { PrismaClient } from '@/../generated/prisma/client';
+import { PrismaClient } from '@/prisma/generated/client';
 import { deliveriesData, driversData, usersData } from './data';
 import bcrypt from 'bcrypt';
 

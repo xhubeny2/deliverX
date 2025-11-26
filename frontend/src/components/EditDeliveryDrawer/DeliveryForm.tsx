@@ -29,7 +29,7 @@ import { Calendar } from '@/components/ui/calendar';
 
 import { createDelivery, updateDelivery } from '@/lib/actions';
 import { DeliveryFormSchema, DeliveryFormValues } from '@/lib/validations';
-import { Delivery } from '@/../generated/prisma/client';
+import { Delivery } from '@/prisma/generated/client';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 

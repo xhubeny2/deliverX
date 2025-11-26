@@ -1,6 +1,6 @@
 'use client';
 
-import { Driver } from '@/../generated/prisma/client';
+import { Driver } from '@/prisma/generated/client';
 import { IconAlertCircle } from '@tabler/icons-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
