@@ -5,6 +5,8 @@ import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
 import { DriversSkeleton, Drivers } from '@/components/dashboard/DashboardDrivers';
 import { EditRunDrawer } from '@/components/dashboard/EditRunDrawer';
 
+export const dynamic = 'force-dynamic';
+
 export default async function DashboardPage() {
   return (
     <div className="flex-1 space-y-8 pt-2">

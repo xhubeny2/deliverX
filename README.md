@@ -1,16 +1,10 @@
 # **DeliverX**
 
 ## **Start**
-Pro spuštění projektu použijte následující:
-```
-npx prisma migrate dev --name init
-npx prisma db seed
-npm run dev
-```
-
-Pro reset databáze a start od začátku:
+Reset DB, seed testovacích dat a spuštění aplikace:
 ```
 npx prisma migrate reset
+npm run dev
 ```
 
 ## **1\. Přehled Projektu**

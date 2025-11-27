@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import useSWR from 'swr';
 import { useQueryState } from 'nuqs';
 import {
@@ -16,18 +16,27 @@ import { IconSparkles } from '@tabler/icons-react';
 import { fetcher } from '@/lib/utils';
 import { RunEditData } from '@/lib/types';
 import { RunForm } from './index';
+import { useRideGeneration } from '@/context/RunGenerationContext';
 
 export function EditRunDrawer() {
   const isMobile = useIsMobile();
+  const { lastUpdate } = useRideGeneration();
   const [action, setAction] = useQueryState('action');
   const [driverId, setDriverId] = useQueryState('driverId');
 
   const isOpen = action === 'generate';
 
-  const { data, isLoading } = useSWR<RunEditData>(
+  const { data, isLoading, mutate } = useSWR<RunEditData>(
     isOpen ? '/api/dashboard/new-ride' : null,
     fetcher,
   );
+
+  // Refetch data when drawer is opened and ride generation is completed
+  useEffect(() => {
+    if (isOpen) {
+      mutate();
+    }
+  }, [isOpen, mutate, lastUpdate]);
 
   const handleOpenChange = (open: boolean) => {
     setAction(open ? 'generate' : null);

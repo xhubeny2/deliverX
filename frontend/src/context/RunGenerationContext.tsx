@@ -12,12 +12,14 @@ interface RunGenerationContextType {
     driverId: string,
     deliveries: Pick<Delivery, 'id' | 'address' | 'deliveryDate'>[],
   ) => Promise<void>;
+  lastUpdate: number;
 }
 
 const RunGenerationContext = createContext<RunGenerationContextType | undefined>(undefined);
 
 export function RunGenerationProvider({ children }: { children: React.ReactNode }) {
   const [isGenerating, setIsGenerating] = useState(false);
+  const [lastUpdate, setLastUpdate] = useState(0);
   const router = useRouter();
 
   const startGeneration = useCallback(
@@ -45,6 +47,7 @@ export function RunGenerationProvider({ children }: { children: React.ReactNode 
       toast.promise(generationPromise, {
         loading: 'AI generation started. Routes are being optimized in the background...',
         success: (result) => {
+          setLastUpdate(Date.now());
           // Refresh data to show new runs
           router.refresh();
           return `Optimization Complete! Successfully assigned ${result.count} parcels.`;
@@ -58,7 +61,7 @@ export function RunGenerationProvider({ children }: { children: React.ReactNode 
   );
 
   return (
-    <RunGenerationContext.Provider value={{ isGenerating, startGeneration }}>
+    <RunGenerationContext.Provider value={{ isGenerating, startGeneration, lastUpdate }}>
       {children}
     </RunGenerationContext.Provider>
   );
