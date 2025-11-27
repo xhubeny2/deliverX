@@ -1,4 +1,4 @@
-# **DeliverX**
+# **DeliverX - Plan fast. Deliver faster!**
 
 ## **Start**
 Reset DB, seed testovacích dat a spuštění aplikace:
