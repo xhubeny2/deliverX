@@ -1,11 +1,11 @@
 import React, { Suspense } from 'react';
-import { DashboardHeader } from '@/components/DashboardHeader/DashboardHeader';
-import Cards from '@/components/DashboardCards/Cards';
-import Drivers from '@/components/DashboardDrivers/Drivers';
-import { CardsSkeleton } from '@/components/DashboardCards/CardsSkeleton';
-import { DriversSkeleton } from '@/components/DashboardDrivers/DriversSkeleton';
-import EditRunDrawer from '@/components/EditRunDrawer/EditRunDrawer';
-import { GenerateButton } from '@/components/GenerateButton';
+import { Cards, CardsSkeleton } from '@/components/dashboard/Cards';
+import { GenerateButton, GenerateButtonSkeleton } from '@/components/dashboard/GenerateButton';
+import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
+import { DriversSkeleton, Drivers } from '@/components/dashboard/DashboardDrivers';
+import { EditRunDrawer } from '@/components/dashboard/EditRunDrawer';
+
+export const dynamic = 'force-dynamic';
 
 export default async function DashboardPage() {
   return (
@@ -14,7 +14,9 @@ export default async function DashboardPage() {
         heading="Dashboard"
         text={`Today’s Operations Overview - ${new Date().toLocaleDateString()}`}
       >
-        <GenerateButton />
+        <Suspense fallback={<GenerateButtonSkeleton />}>
+          <GenerateButton />
+        </Suspense>
       </DashboardHeader>
 
       {/* Overview (KPI) */}
@@ -30,8 +32,9 @@ export default async function DashboardPage() {
         <Drivers />
       </Suspense>
 
-      {/*<GenerateRidesSheet />*/}
-      <EditRunDrawer />
+      <Suspense fallback={null}>
+        <EditRunDrawer />
+      </Suspense>
     </div>
   );
 }

@@ -50,7 +50,19 @@ export async function generateOptimizedRun(
     const responseText = result.response.text();
 
     // Parse Gemini Response
-    const optimizedRoute = JSON.parse(responseText);
+    const optimizedRoute = JSON.parse(responseText) as Pick<
+      Delivery & { reason: string },
+      'id' | 'order' | 'reason'
+    >[];
+
+    // check that AI returned only valid delivery IDs
+    const validDeliveriesToUpdate = optimizedRoute.filter((item) =>
+      deliveries.some((d) => d.id === item.id),
+    );
+
+    if (validDeliveriesToUpdate.length === 0) {
+      return { success: false, message: 'AI returned invalid IDs.' };
+    }
 
     // Save to Database (Transaction)
     // 1. Create the Run
@@ -66,7 +78,7 @@ export async function generateOptimizedRun(
 
       // Update each delivery to link it to the run
       // Note: If you had a 'sequence' column, you would save 'item.order' there.
-      for (const item of optimizedRoute) {
+      for (const item of validDeliveriesToUpdate) {
         await tx.delivery.update({
           where: { id: item.id },
           data: {
@@ -79,7 +91,7 @@ export async function generateOptimizedRun(
     });
 
     revalidatePath('/dashboard');
-    return { success: true, count: deliveries.length };
+    return { success: true, count: validDeliveriesToUpdate.length };
   } catch (error) {
     console.error('AI Optimization Failed:', error);
     return { success: false, message: 'Failed to generate route.' };

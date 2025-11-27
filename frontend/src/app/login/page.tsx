@@ -2,6 +2,8 @@ import { Metadata } from 'next';
 import { IconTruckDelivery } from '@tabler/icons-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import LoginForm from '@/components/login/LoginForm';
+import { Suspense } from 'react';
+import { LoginFormSkeleton } from '@/components/login/LoginFormSkeleton';
 
 export const metadata: Metadata = {
   title: 'Login - DeliverX',
@@ -22,7 +24,9 @@ export default function LoginPage() {
           <CardDescription>Enter your email to sign in to your account</CardDescription>
         </CardHeader>
         <CardContent>
-          <LoginForm />
+          <Suspense fallback={<LoginFormSkeleton />}>
+            <LoginForm />
+          </Suspense>
         </CardContent>
       </Card>
     </div>

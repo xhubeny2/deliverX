@@ -1,6 +1,6 @@
 'use server';
 
-import prisma from '@/lib/prisma';
+import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { DeliveryFormSchema, DeliveryFormValues } from '@/lib/validations';
@@ -45,7 +45,6 @@ export async function updateDelivery(id: string, data: DeliveryFormValues) {
     });
 
     revalidatePath('/driver'); // In case the driver page shows editable deliveries
-    revalidatePath('/tracking'); // In case the tracking page shows editable deliveries
     revalidatePath('/dashboard/deliveries'); // In case the admin dashboard shows editable deliveries
     return { success: true };
   } catch (error) {

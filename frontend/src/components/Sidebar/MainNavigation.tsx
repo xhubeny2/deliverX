@@ -8,7 +8,6 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
-import QuickCreateButton from '@/components/Sidebar/QuickCreateButton';
 import { usePathname } from 'next/navigation';
 import { MainNavigationProps } from '@/lib/types';
 
@@ -18,7 +17,6 @@ export function MainNavigation({ items }: MainNavigationProps) {
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
-        {/*<QuickCreateButton />*/}
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>

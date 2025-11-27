@@ -6,12 +6,10 @@ import { Badge } from '@/components/ui/badge';
 export default function LandingPage() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-white px-4 text-center">
-      {/* Logo Icon with subtle background */}
       <div className="mb-8 flex h-24 w-24 items-center justify-center rounded-full bg-slate-50 border border-slate-100 shadow-sm">
         <IconTruckDelivery className="h-12 w-12 text-slate-900" />
       </div>
 
-      {/* Small Badge for extra flair */}
       <Badge
         variant="outline"
         className="mb-6 py-1 px-3 text-sm border-orange-200 text-orange-700 bg-orange-50"
@@ -20,12 +18,10 @@ export default function LandingPage() {
         AI-Powered Logistics
       </Badge>
 
-      {/* Main Headlines */}
       <h1 className="text-5xl font-extrabold tracking-tight text-slate-900 sm:text-6xl mb-3">
         DeliverX
       </h1>
 
-      {/* Slogan with Gradient Text Effect */}
       <h2 className="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-500 via-orange-600 to-red-600 mb-6 pb-1">
         Plan routes fast. Deliver faster!
       </h2>
@@ -36,7 +32,6 @@ export default function LandingPage() {
         assistance.
       </p>
 
-      {/* Action Buttons */}
       <div className="flex flex-col gap-4 sm:flex-row">
         <Link href="/dashboard">
           <Button
@@ -57,7 +52,6 @@ export default function LandingPage() {
         </Link>
       </div>
 
-      {/* Footer */}
       <div className="absolute bottom-8 text-sm text-slate-400">
         &copy; 2025 DeliverX Inc. Demo Project.
       </div>
