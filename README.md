@@ -2,7 +2,7 @@
 Demo Project
 
 ## **Start**
-Reset DB, seed testovacích dat a spuštění aplikace:
+Reset DB, seed testovacích dat a spuštění vývojového prostředí aplikace:
 ```
 cd frontend
 npx prisma migrate reset
