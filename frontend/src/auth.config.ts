@@ -8,14 +8,13 @@ export const authConfig = {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
 
-      // Definujeme chráněné cesty
+      // Protected routes
       const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
       const isOnLoginPage = nextUrl.pathname.startsWith('/login');
 
       // 1. If is not logged in and tries to access protected pages
       if (isOnDashboard) {
-        if (isLoggedIn) return true;
-        return false;
+        return isLoggedIn;
       }
 
       // 2. Is Logged and goes to login page

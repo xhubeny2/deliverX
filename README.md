@@ -9,6 +9,15 @@ npx prisma migrate reset
 npm run dev
 ```
 
+Testovací uživatelé:
+```
+email: 'dispecer@deliverx.com',
+password: '123456',
+    
+email: 'ridic@deliverx.com',
+password: '123456',
+```
+
 ## **1\. Přehled Projektu**
 
 **DeliverX** - platforma pro řízení logistiky navržená tak, aby propojila dispečery s řidiči. Je zaměřená na automatizaci denního plánování tras pomocí umělé inteligence (AI) a poskytuje bezproblémové, **mobile-first** prostředí pro řidiče v terénu.
