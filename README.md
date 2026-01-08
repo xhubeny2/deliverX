@@ -1,4 +1,5 @@
 # **🚗 DeliverX - Plan fast. Deliver faster!**
+Demo Project
 
 ## **Start**
 Reset DB, seed testovacích dat a spuštění aplikace:
